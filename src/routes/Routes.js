@@ -85,7 +85,7 @@ const AppTab = () => {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Lanka Hardware"
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
@@ -98,6 +98,8 @@ const AppTab = () => {
         name="Search"
         options={{
           tabBarLabel: "Search",
+          headerShown: false,
+
           tabBarIcon: ({ color }) => (
             <Icon name="search" color={color} size={26} />
           ),
