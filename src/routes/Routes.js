@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
+import { TabActions, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/Feather";
 import { View } from "react-native";
@@ -110,18 +110,29 @@ const AppTab = () => {
         name="Cart"
         options={{
           tabBarLabel: "",
-          tabBarIcon: ({ color }) => (
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "black",
+          tabBarIcon: ({ color, focused }) => (
             <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                height: 68,
-                width: 68,
-                borderRadius: 68,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#ffff",
-              }}
+              style={[
+                {
+                  position: "absolute",
+                  bottom: 0,
+                  height: 68,
+                  width: 68,
+                  borderRadius: 68,
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "white",
+                },
+                focused && { backgroundColor: "#3F72AF" },
+              ]}
             >
               <Icon name="shopping-cart" color={color} size={40} />
             </View>

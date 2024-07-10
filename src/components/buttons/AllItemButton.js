@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   view: {
-    marginTop: 30,
     marginLeft: "auto",
     marginRight: "auto",
+    marginBottom: 50,
   },
 });
