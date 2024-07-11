@@ -12,6 +12,7 @@ import Cart from "../screens/Cart/Cart";
 import Landing from "../screens/Auth/Landing";
 import Login from "../screens/Auth/Login";
 import Signup from "../screens/Auth/Signup";
+import ForgotPassword from "../screens/Auth/ForgotPassword";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -32,9 +33,7 @@ const AuthStack = () => {
         name="Login"
         component={Login}
         options={{
-          title: "Login",
           tabBarVisible: false,
-          headerStyle: { backgroundColor: "#405D72" },
           headerTintColor: "white",
           headerTitleStyle: { fontWeight: "bold", fontSize: 25 },
           headerBackTitleVisible: false,
@@ -42,8 +41,8 @@ const AuthStack = () => {
             <Icon.Button
               name="arrow-left"
               size={25}
-              style={{ paddingLeft: 20 }}
-              backgroundColor="#405D72"
+              color={"#000"}
+              backgroundColor="#fff"
               onPress={() => navigation.navigate("Landing")}
             />
           ),
@@ -53,9 +52,7 @@ const AuthStack = () => {
         name="Signup"
         component={Signup}
         options={{
-          title: "Sign Up",
           tabBarVisible: false,
-          headerStyle: { backgroundColor: "#405D72", borderBottomWidth: 0 },
           headerTintColor: "white",
           headerTitleStyle: { fontWeight: "bold", fontSize: 25 },
           headerBackTitleVisible: false,
@@ -63,9 +60,28 @@ const AuthStack = () => {
             <Icon.Button
               name="arrow-left"
               size={25}
-              backgroundColor="#405D72"
-              style={{ paddingLeft: 20 }}
+              color={"#000"}
+              backgroundColor="#fff"
               onPress={() => navigation.navigate("Landing")}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        options={{
+          tabBarVisible: false,
+          headerTintColor: "white",
+          headerTitleStyle: { fontWeight: "bold", fontSize: 25 },
+          headerBackTitleVisible: false,
+          headerLeft: () => (
+            <Icon.Button
+              name="arrow-left"
+              size={25}
+              color={"#000"}
+              backgroundColor="#fff"
+              onPress={() => navigation.navigate("Login")}
             />
           ),
         }}
@@ -151,7 +167,7 @@ const AppTab = () => {
         component={Wishlist}
       />
       <Tab.Screen
-        name="Settings"
+        name="My Profile"
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (

@@ -10,7 +10,7 @@ export default function FewProducts() {
 
   return (
     <View>
-      <Text style={styles.txt}>Hardware Products</Text>
+      <Text style={styles.txt}>Other Items</Text>
       <View style={styles.container}>
         <View style={styles.grid}>
           {limitedItems.map((item, index) => (
