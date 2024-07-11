@@ -14,25 +14,27 @@ export default function Landing() {
   const navigation = useNavigation();
   const { login } = useContext(AuthContext);
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF8F3" }}>
       <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCiNRnleO4lzGCO5EfJyCP3YSz7y5BIIQX8Q&s",
-            }}
-            style={{ width: 300, height: 300, borderRadius: 150 }}
-          />
+        <Image
+          source={require("../../../assets/icon.png")}
+          style={styles.image}
+        />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.title}>Discover the Best Hardware Deals</Text>
+
+          <Text style={styles.subtitle}>
+            Explore our vast collection of hardware products and get the best
+            prices in town.
+          </Text>
         </View>
-
-        <Text style={styles.title}>Discover the Best Hardware Deals</Text>
-
-        <Text style={styles.subtitle}>
-          Explore our vast collection of hardware products and get the best
-          prices in town.
-        </Text>
-
-        <View style={{ flex: 1, justifyContent: "flex-end", marginBottom: 20 }}>
+        <View style={{ flex: 1, justifyContent: "flex-end", width: "100%" }}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
@@ -63,24 +65,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 20,
+    marginTop: 20,
   },
-  imageContainer: {
-    marginBottom: 20,
+  image: {
+    width: 300,
+    height: 300,
+    borderRadius: 50,
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#1A2130",
   },
   subtitle: {
     textAlign: "center",
     fontSize: 16,
     marginBottom: 20,
+    color: "#141E46",
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "80%",
+    flexDirection: "column",
+    width: "100%",
   },
   button: {
     backgroundColor: "#F7E7DC",
@@ -88,6 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 0.17,
     paddingHorizontal: 30,
+    marginVertical: 15,
   },
   redButton: {
     backgroundColor: "#405D72",

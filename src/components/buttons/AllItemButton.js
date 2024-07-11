@@ -9,7 +9,7 @@ export default function AllItemButton() {
     <View style={styles.view}>
       <Pressable
         style={styles.pressable}
-        onPress={() => navigation.navigate("Search")}
+        onPress={() => navigation.navigate("ProductDeatil")}
       >
         <Text style={styles.txt}>View all items</Text>
       </Pressable>

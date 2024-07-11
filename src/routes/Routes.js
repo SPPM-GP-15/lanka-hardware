@@ -13,6 +13,12 @@ import Landing from "../screens/Auth/Landing";
 import Login from "../screens/Auth/Login";
 import Signup from "../screens/Auth/Signup";
 import ForgotPassword from "../screens/Auth/ForgotPassword";
+import DetailProduct from "../components/single-detail-product/DetailProduct";
+import MyProfile from "../screens/Settings/MyProfile";
+import EditProfile from "../screens/Settings/EditProfile";
+import ShippingAddress from "../screens/Settings/ShippingAddress";
+import Orders from "../screens/Settings/Orders";
+import AddAddress from "../screens/Settings/AddAddress";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -34,18 +40,11 @@ const AuthStack = () => {
         component={Login}
         options={{
           tabBarVisible: false,
-          headerTintColor: "white",
-          headerTitleStyle: { fontWeight: "bold", fontSize: 25 },
+          headerShown: true,
+          headerTitle: "",
           headerBackTitleVisible: false,
-          headerLeft: () => (
-            <Icon.Button
-              name="arrow-left"
-              size={25}
-              color={"#000"}
-              backgroundColor="#fff"
-              onPress={() => navigation.navigate("Landing")}
-            />
-          ),
+          headerShadowVisible: false,
+          headerTintColor: "black",
         }}
       />
       <Stack.Screen
@@ -53,18 +52,11 @@ const AuthStack = () => {
         component={Signup}
         options={{
           tabBarVisible: false,
-          headerTintColor: "white",
-          headerTitleStyle: { fontWeight: "bold", fontSize: 25 },
+          headerShown: true,
+          headerTitle: "",
           headerBackTitleVisible: false,
-          headerLeft: () => (
-            <Icon.Button
-              name="arrow-left"
-              size={25}
-              color={"#000"}
-              backgroundColor="#fff"
-              onPress={() => navigation.navigate("Landing")}
-            />
-          ),
+          headerShadowVisible: false,
+          headerTintColor: "black",
         }}
       />
       <Stack.Screen
@@ -72,23 +64,96 @@ const AuthStack = () => {
         component={ForgotPassword}
         options={{
           tabBarVisible: false,
-          headerTintColor: "white",
-          headerTitleStyle: { fontWeight: "bold", fontSize: 25 },
+          headerShown: true,
+          headerTitle: "",
           headerBackTitleVisible: false,
-          headerLeft: () => (
-            <Icon.Button
-              name="arrow-left"
-              size={25}
-              color={"#000"}
-              backgroundColor="#fff"
-              onPress={() => navigation.navigate("Login")}
-            />
-          ),
+          headerShadowVisible: false,
+          headerTintColor: "black",
         }}
       />
     </Stack.Navigator>
   );
 };
+
+function HomeNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={HomeProducts}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ProductDeatil"
+        component={DetailProduct}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+function SettingsNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="Settings">
+      <Stack.Screen
+        name="Settings"
+        component={MyProfile}
+        options={{
+          headerShown: true,
+          headerShadowVisible: false,
+          headerStatusBarHeight: 0,
+        }}
+      />
+      <Stack.Screen
+        name="Orders"
+        component={Orders}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: true,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+        }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: true,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+        }}
+      />
+      <Stack.Screen
+        name="ShippingAddress"
+        component={ShippingAddress}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: true,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+        }}
+      />
+      <Stack.Screen
+        name="AddAddress"
+        component={AddAddress}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 const AppTab = () => {
   return (
@@ -108,14 +173,13 @@ const AppTab = () => {
             <Icon name="home" color={color} size={26} />
           ),
         }}
-        component={HomeProducts}
+        component={HomeNavigator}
       />
       <Tab.Screen
         name="Search"
         options={{
           tabBarLabel: "Search",
           headerShown: false,
-
           tabBarIcon: ({ color }) => (
             <Icon name="search" color={color} size={26} />
           ),
@@ -170,11 +234,12 @@ const AppTab = () => {
         name="My Profile"
         options={{
           tabBarLabel: "Settings",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <Icon name="settings" color={color} size={26} />
           ),
         }}
-        component={Settings}
+        component={SettingsNavigator}
       />
     </Tab.Navigator>
   );
