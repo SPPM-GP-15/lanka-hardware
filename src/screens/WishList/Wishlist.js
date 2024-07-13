@@ -1,33 +1,44 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { ScrollView } from "react-native";
 import ProductCard from "../../components/wishlist-product/ProductCard";
 
 export default function Wishlist() {
   return (
-    <ScrollView
-      vertical
-      showsVerticalScrollIndicator={true}
-      style={styles.container}
-    >
-      <Text style={styles.txt}>Products</Text>
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-    </ScrollView>
+    <View style={styles.screen}>
+      <ScrollView
+        vertical
+        showsVerticalScrollIndicator={true}
+        style={styles.container}
+      >
+        <Text style={styles.txt}>Products</Text>
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    position: "relative",
+  },
   container: {
     flex: 1,
   },
   txt: {
     marginVertical: 20,
     fontSize: 20,
-    marginLeft: 20,
+    textAlign: "center",
     fontWeight: "600",
   },
+
   productCard: {
     backgroundColor: "#fff",
     borderRadius: 8,

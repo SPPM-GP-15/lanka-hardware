@@ -279,6 +279,7 @@ const AppTab = () => {
           tabBarIcon: ({ color }) => (
             <Icon name="heart" color={color} size={26} />
           ),
+          headerShown: false,
         }}
         component={Wishlist}
       />
