@@ -1,4 +1,10 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import React, { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
@@ -8,7 +14,7 @@ export default function Landing() {
   const { login } = useContext(AuthContext);
   return (
     <SafeAreaView>
-      <View>
+      <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Login");
@@ -39,3 +45,9 @@ export default function Landing() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 60,
+  },
+});

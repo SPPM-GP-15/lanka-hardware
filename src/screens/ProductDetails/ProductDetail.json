@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Cement",
+    "subtitle": "Ultratech",
+    "price": "Rs: 2,000",
+    "image": "../../../assets/item2.jpeg"
+  },
+  {
+    "id": 2,
+    "title": "Roller Brush",
+    "subtitle": "Nippon Brush",
+    "price": "Rs: 500",
+    "image": "../../../assets/item3.jpeg"
+  },
+  {
+    "id": 3,
+    "title": "Screws",
+    "subtitle": "screws",
+    "price": "Rs: 20",
+    "image": "../../../assets/item4.jpeg"
+  },
+  {
+    "id": 4,
+    "title": "PVC",
+    "subtitle": "SLON PVC",
+    "price": "Rs: 1000",
+    "image": "../../../assets/item5.jpeg"
+  },
+  {
+    "id": 5,
+    "title": "Wire",
+    "subtitle": "ACL Wire roll",
+    "price": "Rs: 2500",
+    "image": "../../../assets/item6.jpeg"
+  },
+  {
+    "id": 6,
+    "title": "Switch",
+    "subtitle": "Orange",
+    "price": "Rs: 500",
+    "image": "../../../assets/item7.jpeg"
+  }
+]

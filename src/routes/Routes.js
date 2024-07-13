@@ -12,9 +12,11 @@ import Cart from "../screens/Cart/Cart";
 import Landing from "../screens/Auth/Landing";
 import Login from "../screens/Auth/Login";
 import Signup from "../screens/Auth/Signup";
+import ProductDetail from "../screens/ProductDetails/ProductDetail.js";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const HomeStack = createStackNavigator();
 
 const AuthStack = () => {
   const navigation = useNavigation();
@@ -74,6 +76,23 @@ const AuthStack = () => {
   );
 };
 
+const HomeStackNavigator = () => {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="HomeProducts"
+        component={HomeProducts}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="ProductDetail"
+        component={ProductDetail}
+        options={{ headerShown: false }}
+      />
+    </HomeStack.Navigator>
+  );
+};
+
 const AppTab = () => {
   return (
     <Tab.Navigator
@@ -87,12 +106,13 @@ const AppTab = () => {
       <Tab.Screen
         name="Home"
         options={{
+          headerShown: false,
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
             <Icon name="home" color={color} size={26} />
           ),
         }}
-        component={HomeProducts}
+        component={HomeStackNavigator}
       />
       <Tab.Screen
         name="Search"
