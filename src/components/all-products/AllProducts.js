@@ -5,8 +5,10 @@ import { SearchContext } from "../../context/SearchContext";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { items } from "../../data/data";
 import ModalDropdown from "react-native-modal-dropdown";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AllProducts() {
+  const navigation = useNavigation();
   const { value } = useContext(SearchContext);
 
   const handleSortSelect = (index, value) => {
@@ -60,7 +62,11 @@ export default function AllProducts() {
 
       <View style={styles.grid}>
         {items.map((item, index) => (
-          <TouchableOpacity key={index} style={styles.itemCard}>
+          <TouchableOpacity
+            key={index}
+            style={styles.itemCard}
+            onPress={() => navigation.navigate("DetailProductSearch", { item })}
+          >
             <SingleProduct item={item} />
           </TouchableOpacity>
         ))}
@@ -98,7 +104,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     color: "#000",
-    
   },
   sortButton: {
     flexDirection: "row",
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    marginLeft: 20,
+    marginLeft: 14,
     fontWeight: "600",
   },
   grid: {

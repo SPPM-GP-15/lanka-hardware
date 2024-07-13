@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
-import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { CheckBox } from "react-native-elements";
 
 export default function ShippingAddress() {
   const navigation = useNavigation();
@@ -44,9 +43,40 @@ export default function ShippingAddress() {
     },
   ]);
 
+  const handleCheck = (index) => {
+    const newAddresses = addresses.map((address, i) =>
+      i === index ? { ...address, checked: !address.checked } : address
+    );
+    setAddresses(newAddresses);
+  };
+
+  const handleDelete = (index) => {
+    const newAddresses = addresses.filter((_, i) => i !== index);
+    setAddresses(newAddresses);
+  };
+
+  const confirmDelete = (index) => {
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete this address?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => handleDelete(index),
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Address</Text>
+      <Text style={styles.header}>Shipping Address</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {addresses.map((address, index) => (
           <View key={index} style={styles.addressCard}>
@@ -62,6 +92,14 @@ export default function ShippingAddress() {
               <TouchableOpacity style={styles.editButton}>
                 <Text style={styles.buttonText}>Edit</Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => confirmDelete(index)}
+              >
+                <Text style={[styles.buttonText, { color: "white" }]}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         ))}
@@ -72,7 +110,7 @@ export default function ShippingAddress() {
           navigation.navigate("AddAddress");
         }}
       >
-        <Text style={{ fontSize: 30, color: "white" }}>+</Text>
+        <Text style={{ fontSize: 32, color: "white" }}>+</Text>
       </TouchableOpacity>
     </View>
   );
@@ -82,6 +120,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#fff",
   },
   header: {
     fontSize: 24,
@@ -94,7 +133,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
     padding: 20,
-    backgroundColor: "#dddd",
+    backgroundColor: "#eaeaea",
     borderRadius: 8,
   },
   addressInfo: {
@@ -108,7 +147,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#333",
     marginTop: 5,
-    width: "80%",
+    width: "90%",
   },
   actions: {
     flexDirection: "row",
@@ -120,6 +159,13 @@ const styles = StyleSheet.create({
   editButton: {
     padding: 5,
     borderRadius: 5,
+    marginRight: 10,
+  },
+  deleteButton: {
+    padding: 3,
+    paddingHorizontal: 4,
+    borderRadius: 5,
+    backgroundColor: "red",
   },
   buttonText: {
     color: "#071952",
@@ -129,6 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 20,
     marginBottom: 40,
   },
 });

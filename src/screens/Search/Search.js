@@ -6,9 +6,9 @@ import {
   RefreshControl,
 } from "react-native";
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native";
-import Searchbar from "../components/searchBar/SearchBar";
-import AllProducts from "../components/all-products/AllProducts";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Searchbar from "../../components/searchBar/SearchBar";
+import AllProducts from "../../components/all-products/AllProducts";
 
 export default function Search() {
   const [refreshing, setRefreshing] = useState(false);
@@ -19,14 +19,14 @@ export default function Search() {
   };
 
   return (
-    <SafeAreaView style={{ marginTop: 30 }}>
+    <SafeAreaView>
       <Searchbar placeholder="Search any Products..." />
       <ScrollView
         vertical
         showsVerticalScrollIndicator={true}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 30 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

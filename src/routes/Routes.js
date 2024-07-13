@@ -4,21 +4,21 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/Feather";
 import { View } from "react-native";
 
-import HomeProducts from "../screens/HomeProducts";
-import Wishlist from "../screens/Wishlist";
-import Search from "../screens/Search";
-import Settings from "../screens/Settings/Settings";
+import Search from "../screens/Search/Search";
 import Cart from "../screens/Cart/Cart";
+import Checkout from "../screens/Cart/Checkout";
 import Landing from "../screens/Auth/Landing";
 import Login from "../screens/Auth/Login";
 import Signup from "../screens/Auth/Signup";
 import ForgotPassword from "../screens/Auth/ForgotPassword";
-import DetailProduct from "../components/single-detail-product/DetailProduct";
 import MyProfile from "../screens/Settings/MyProfile";
 import EditProfile from "../screens/Settings/EditProfile";
 import ShippingAddress from "../screens/Settings/ShippingAddress";
 import Orders from "../screens/Settings/Orders";
 import AddAddress from "../screens/Settings/AddAddress";
+import HomeProducts from "../screens/Home/HomeProducts";
+import DetailProduct from "../screens/Home/DetailProduct";
+import Wishlist from "../screens/WishList/Wishlist";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -86,8 +86,60 @@ function HomeNavigator() {
         }}
       />
       <Stack.Screen
-        name="ProductDeatil"
+        name="DetailProduct"
         component={DetailProduct}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#f2f2f2" },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function SearchNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="Search">
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DetailProductSearch"
+        component={DetailProduct}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#f2f2f2" },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function CartNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="Cart">
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={Checkout}
         options={{
           headerShown: false,
         }}
@@ -95,6 +147,7 @@ function HomeNavigator() {
     </Stack.Navigator>
   );
 }
+
 function SettingsNavigator() {
   return (
     <Stack.Navigator initialRouteName="Settings">
@@ -102,9 +155,7 @@ function SettingsNavigator() {
         name="Settings"
         component={MyProfile}
         options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerStatusBarHeight: 0,
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -168,6 +219,7 @@ const AppTab = () => {
       <Tab.Screen
         name="Lanka Hardware"
         options={{
+          headerShown: false,
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
             <Icon name="home" color={color} size={26} />
@@ -176,7 +228,7 @@ const AppTab = () => {
         component={HomeNavigator}
       />
       <Tab.Screen
-        name="Search"
+        name="Search Product"
         options={{
           tabBarLabel: "Search",
           headerShown: false,
@@ -184,10 +236,10 @@ const AppTab = () => {
             <Icon name="search" color={color} size={26} />
           ),
         }}
-        component={Search}
+        component={SearchNavigator}
       />
       <Tab.Screen
-        name="Cart"
+        name="Shopping Cart"
         options={{
           tabBarLabel: "",
           tabBarActiveTintColor: "white",
@@ -218,7 +270,7 @@ const AppTab = () => {
             </View>
           ),
         }}
-        component={Cart}
+        component={CartNavigator}
       />
       <Tab.Screen
         name="Wishlist"
