@@ -82,6 +82,7 @@ const Signup = () => {
             style={styles.input}
             placeholder="Name"
             value={name}
+            autoCapitalize="words"
             onChangeText={setName}
           />
         </View>

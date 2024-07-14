@@ -17,7 +17,6 @@ import CatergoryListedItems from "../../components/catergory/CatergoryListedItem
 
 const HomeProducts = () => {
   const [type, setType] = useState("All");
-  const width = Dimensions.get("window").width;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -29,7 +28,7 @@ const HomeProducts = () => {
         <Text style={styles.text}>Lanka Hardware</Text>
         <SearchBar placeholder="Search any Products..." />
         <Category type={type} setType={setType} />
-        {type === "All" ? (
+        {type === "All" || null ? (
           <>
             <Offer />
             <Deals title={"Todays Deal"} />

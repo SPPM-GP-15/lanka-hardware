@@ -2,9 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
-import Completed from "../../components/orders/Completed";
-import Delivered from "../../components/orders/Delivered";
-import Processing from "../../components/orders/Processing";
+import OrderBox from "../../components/orders/OrderBox";
 import { ScrollView } from "react-native";
 
 export default function Orders() {
@@ -23,6 +21,14 @@ export default function Orders() {
       });
     };
   }, [navigation]);
+  const orders = {
+    itemName: "Item 1",
+    orderDescription: "this ideads asddsdsda asd asdasd asd asd asdsads asdasd",
+    customerName: "Estimated",
+    orderPrice: 29.99,
+    orderStatus: "Cancelled",
+    category: "Hardware",
+  };
 
   const renderContent = () => {
     switch (selectedIndex) {
@@ -36,9 +42,9 @@ export default function Orders() {
             style={styles.box}
           >
             <View style={{ paddingHorizontal: 15 }}>
-              <Processing />
-              <Processing />
-              <Processing />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
             </View>
           </ScrollView>
         );
@@ -52,9 +58,10 @@ export default function Orders() {
             style={styles.box}
           >
             <View style={{ paddingHorizontal: 15 }}>
-              <Delivered />
-              <Delivered />
-              <Delivered />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
             </View>
           </ScrollView>
         );
@@ -68,20 +75,10 @@ export default function Orders() {
             style={styles.box}
           >
             <View style={{ paddingHorizontal: 15 }}>
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
-              <Completed />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
             </View>
           </ScrollView>
         );
@@ -95,7 +92,7 @@ export default function Orders() {
       <Text style={styles.header}>Orders</Text>
       <View style={{ paddingHorizontal: 15 }}>
         <SegmentedControl
-          values={["Processing", "Delivered", "Completed"]}
+          values={["Processing", "Completed", "Cancelled"]}
           selectedIndex={selectedIndex}
           onChange={(event) => {
             setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
@@ -120,5 +117,6 @@ const styles = StyleSheet.create({
   },
   box: {
     marginVertical: 20,
+    height: "100%",
   },
 });

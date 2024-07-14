@@ -185,15 +185,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    padding: 10,
-    paddingVertical: 15,
   },
   icon: {
     marginRight: 10,
+    padding: 15,
   },
   input: {
     flex: 1,
     fontSize: 15,
+    backgroundColor: "#fafafa",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5,
+    paddingVertical: 15,
   },
   label: {
     marginBottom: 10,
@@ -201,7 +205,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#405D72",
-    borderRadius: 15,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 40,

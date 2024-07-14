@@ -19,6 +19,8 @@ import AddAddress from "../screens/Settings/AddAddress";
 import HomeProducts from "../screens/Home/HomeProducts";
 import DetailProduct from "../screens/Home/DetailProduct";
 import Wishlist from "../screens/WishList/Wishlist";
+import ProfileDetails from "../screens/Cart/ProfileDetails";
+import Payment from "../screens/Cart/Payment";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -129,19 +131,49 @@ function SearchNavigator() {
 
 function CartNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Cart">
+    <Stack.Navigator initialRouteName="Shopping Cart">
       <Stack.Screen
-        name="Cart"
+        name="Shopping Cart"
         component={Cart}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerShadowVisible: false,
         }}
       />
       <Stack.Screen
         name="Checkout"
         component={Checkout}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#f2f2f2" },
+        }}
+      />
+      <Stack.Screen
+        name="ProfileDetails"
+        component={ProfileDetails}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#f2f2f2" },
+        }}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerShadowVisible: false,
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#f2f2f2" },
         }}
       />
     </Stack.Navigator>
@@ -239,11 +271,13 @@ const AppTab = () => {
         component={SearchNavigator}
       />
       <Tab.Screen
-        name="Shopping Cart"
+        name="Cart"
         options={{
           tabBarLabel: "",
           tabBarActiveTintColor: "white",
           tabBarInactiveTintColor: "black",
+          headerShadowVisible: false,
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <View
               style={[

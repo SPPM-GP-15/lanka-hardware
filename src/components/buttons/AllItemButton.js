@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 5,
     paddingHorizontal: 20,
-    borderRadius: 4,
+    borderRadius: 10,
     elevation: 3,
     backgroundColor: "black",
   },

@@ -22,7 +22,7 @@ export default function Category(props) {
           return (
             <TouchableOpacity
               activeOpacity={1}
-              onPress={() => setType(type === item.name ? "" : item.name)}
+              onPress={() => setType(type === item.name ? null : item.name)}
             >
               <View
                 style={[
