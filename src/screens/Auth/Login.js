@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { AuthContext } from "../../context/AuthContext";
@@ -14,12 +15,42 @@ import { AuthContext } from "../../context/AuthContext";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({});
   const navigation = useNavigation();
   const { login } = useContext(AuthContext);
 
+  const validateInputs = () => {
+    let valid = true;
+    let errors = {};
+
+    if (!email) {
+      valid = false;
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      valid = false;
+      errors.email = "Email address is invalid";
+    }
+
+    if (!password) {
+      valid = false;
+      errors.password = "Password is required";
+    }
+
+    setErrors(errors);
+    return valid;
+  };
+
   const handleLogin = () => {
-    login("Ahmed");
+    login(email);
+
+    // if (validateInputs()) {
+    //   login(email);
+    // } else {
+    //   Alert.alert(
+    //     "Invalid Input",
+    //     "Please check your input fields for errors."
+    //   );
+    // }
   };
 
   return (
@@ -40,8 +71,12 @@ const Login = () => {
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
+        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
         <View style={styles.inputContainer}>
           <Icon name="lock" size={24} color="black" style={styles.icon} />
           <TextInput
@@ -52,6 +87,10 @@ const Login = () => {
             onChangeText={setPassword}
           />
         </View>
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
+
         <Text
           style={styles.forgetPass}
           onPress={() => navigation.navigate("ForgotPassword")}
@@ -106,6 +145,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
   },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+    marginTop: -10,
+  },
   forgetPass: {
     fontSize: 13,
     marginVertical: 5,
@@ -133,7 +177,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: "#405D72",
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 15,
   },
   buttonText: {
     color: "#fff",

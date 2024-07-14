@@ -3,37 +3,13 @@ import React from "react";
 import SingleProduct from "../all-products/SingleProduct";
 import { items } from "../../data/data";
 import { useNavigation } from "@react-navigation/native";
-import RNPickerSelect from "react-native-picker-select";
 
-export default function AllProducts() {
+export default function CatergoryListedItems({ type }) {
   const navigation = useNavigation();
-
   return (
     <View style={styles.container}>
       <View style={styles.resultsContainer}>
-        {items && (
-          <Text style={styles.title}>
-            {items.length < 2 ? items.length : items.length - 1 + "+"} Item
-            {items.length > 1 && "s"}
-          </Text>
-        )}
-        <View style={styles.sortFilterContainer}>
-          <View style={styles.filterButton}>
-            <RNPickerSelect
-              placeholder={{
-                label: "Sort",
-                value: null,
-              }}
-              onValueChange={(value) => console.log(value)}
-              items={[
-                { label: "Recommended", value: "recommend" },
-                { label: "Price Low to High", value: "priceLtoH" },
-                { label: "Price High to Low", value: "priceHtoL" },
-                { label: "Best Selling", value: "bestsell" },
-              ]}
-            />
-          </View>
-        </View>
+        <Text style={styles.title}>{type} Items</Text>
       </View>
 
       <View style={styles.grid}>
@@ -41,7 +17,7 @@ export default function AllProducts() {
           <TouchableOpacity
             key={index}
             style={styles.itemCard}
-            onPress={() => navigation.navigate("DetailProductSearch", { item })}
+            onPress={() => navigation.navigate("DetailProduct", { item })}
           >
             <SingleProduct item={item} />
           </TouchableOpacity>
@@ -59,16 +35,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-
-  filterButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#aaa",
-    borderRadius: 8,
-    marginRight: 10,
   },
 
   title: {

@@ -5,12 +5,12 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
 } from "react-native";
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import Icon from "react-native-vector-icons/Entypo";
+import Icon from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyProfile() {
   const { logout } = useContext(AuthContext);
@@ -19,10 +19,10 @@ export default function MyProfile() {
   return (
     <ScrollView
       vertical
-      showsVerticalScrollIndicator={true}
+      showsVerticalScrollIndicator={false}
       style={styles.container}
     >
-      <SafeAreaView style={{ marginBottom: 50 }}>
+      <SafeAreaView style={{ marginVertical: 40 }}>
         <View style={styles.header}>
           <Image
             source={{
@@ -33,26 +33,39 @@ export default function MyProfile() {
           <Text style={styles.name}>Ahmed Anwer</Text>
           <Text style={styles.email}>ahmedanwer@gmail.com</Text>
         </View>
+        <View style={{ flex: 1 }} />
 
-        <View style={styles.section}>
+        <View style={{ padding: 10, marginTop: 80 }}>
           <TouchableOpacity
             style={styles.option}
             onPress={() => navigation.navigate("EditProfile")}
           >
             <View style={styles.section}>
-              <Text style={styles.optionText}>Edit Profile</Text>
+              <View style={styles.optionContent}>
+                <Icon name="edit" size={15} style={styles.optionIcon} />
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={styles.optionText}>Edit Profile</Text>
+                </View>
+              </View>
             </View>
-            <Icon name="chevron-right" size={18} />
+            <Icon name="chevron-right" size={18} color={"#aaa"} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.option}
             onPress={() => navigation.navigate("Orders")}
           >
             <View style={styles.section}>
-              <Text style={styles.optionText}>My Orders</Text>
-              <Text style={styles.optionDetail}>Already have 12 orders</Text>
+              <View style={styles.optionContent}>
+                <Icon name="shopping-bag" size={15} style={styles.optionIcon} />
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={styles.optionText}>My Orders</Text>
+                  <Text style={styles.optionDetail}>
+                    Already have 12 orders
+                  </Text>
+                </View>
+              </View>
             </View>
-            <Icon name="chevron-right" size={18} />
+            <Icon name="chevron-right" size={18} color={"#aaa"} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -60,24 +73,26 @@ export default function MyProfile() {
             onPress={() => navigation.navigate("ShippingAddress")}
           >
             <View style={styles.section}>
-              <Text style={styles.optionText}>Shipping Address</Text>
-              <Text style={styles.optionDetail}>3 addresses</Text>
+              <View style={styles.optionContent}>
+                <Icon name="map-pin" size={15} style={styles.optionIcon} />
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={styles.optionText}>Shipping Address</Text>
+                  <Text style={styles.optionDetail}>3 addresses</Text>
+                </View>
+              </View>
             </View>
-            <Icon name="chevron-right" size={18} />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.option} onPress={() => {}}>
-            <View style={styles.section}>
-              <Text style={styles.optionText}>Forgot Password</Text>
-            </View>
-            <Icon name="chevron-right" size={18} />
+            <Icon name="chevron-right" size={18} color={"#aaa"} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.logOutBox} onPress={() => logout()}>
             <View style={styles.section}>
-              <Text style={[styles.optionText, { fontSize: 19, color: "red" }]}>
-                Log Out
-              </Text>
+              <View style={styles.optionContent}>
+                <Text
+                  style={[styles.optionText, { fontSize: 19, color: "red" }]}
+                >
+                  Log Out
+                </Text>
+              </View>
             </View>
             <Icon name="log-out" size={23} color={"red"} />
           </TouchableOpacity>
@@ -93,6 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
+    flex: 1,
     alignItems: "center",
     padding: 20,
   },
@@ -102,14 +118,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   profileImage: {
-    width: 80,
-    height: 80,
+    width: 120,
+    height: 120,
     borderRadius: 40,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   name: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#06061b",
     marginBottom: 5,
   },
   email: {
@@ -123,11 +140,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 10,
+    padding: 8,
+
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-
+  optionContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  optionIcon: {
+    marginRight: 10,
+  },
   optionText: {
     fontSize: 16,
     fontWeight: "bold",
@@ -143,10 +167,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 5,
     paddingHorizontal: 15,
-    borderWidth: 0.2,
+    borderWidth: 1,
     borderColor: "red",
     marginTop: 50,
-    borderRadius: 20,
+    borderRadius: 15,
     marginLeft: 20,
     marginRight: 20,
   },

@@ -1,12 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { ScrollView } from "react-native";
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 
@@ -15,11 +16,53 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({});
   const navigation = useNavigation();
 
+  const validateInputs = () => {
+    let valid = true;
+    let errors = {};
+
+    if (!name) {
+      valid = false;
+      errors.name = "Name is required";
+    }
+
+    if (!email) {
+      valid = false;
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      valid = false;
+      errors.email = "Email address is invalid";
+    }
+
+    if (!password) {
+      valid = false;
+      errors.password = "Password is required";
+    }
+
+    if (!confirmPassword) {
+      valid = false;
+      errors.confirmPassword = "Confirm password is required";
+    } else if (password !== confirmPassword) {
+      valid = false;
+      errors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(errors);
+    return valid;
+  };
+
   const handleCreateAccount = () => {
-    // Handle account creation logic here
-    console.log("Creating account with:", { email, password });
+    if (validateInputs()) {
+      // Handle account creation logic here
+      console.log("Creating account with:", { name, email, password });
+    } else {
+      Alert.alert(
+        "Invalid Input",
+        "Please check your input fields for errors."
+      );
+    }
   };
 
   return (
@@ -30,7 +73,7 @@ const Signup = () => {
       bounces={false}
       style={styles.container}
     >
-      <Text style={styles.title}>Lets Register </Text>
+      <Text style={styles.title}>Let's Register</Text>
       <Text style={styles.title}>Account</Text>
       <View style={{ marginTop: 35 }}>
         <View style={styles.inputContainer}>
@@ -39,9 +82,12 @@ const Signup = () => {
             style={styles.input}
             placeholder="Name"
             value={name}
+            autoCapitalize="words"
             onChangeText={setName}
           />
         </View>
+        {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+
         <View style={styles.inputContainer}>
           <Icon name="mail" size={24} color="#000" style={styles.icon} />
           <TextInput
@@ -49,8 +95,12 @@ const Signup = () => {
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
+        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
         <View style={styles.inputContainer}>
           <Icon name="lock" size={24} color="#000" style={styles.icon} />
           <TextInput
@@ -61,6 +111,10 @@ const Signup = () => {
             onChangeText={setPassword}
           />
         </View>
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
+
         <View style={styles.inputContainer}>
           <Icon name="lock" size={24} color="#000" style={styles.icon} />
           <TextInput
@@ -71,8 +125,12 @@ const Signup = () => {
             onChangeText={setConfirmPassword}
           />
         </View>
+        {errors.confirmPassword && (
+          <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+        )}
+
         <Text style={[styles.agreement, { marginVertical: 10 }]}>
-          By continuing, you agre to our Terms & Conditions
+          By continuing, you agree to our Terms & Conditions
         </Text>
         <TouchableOpacity style={styles.button} onPress={handleCreateAccount}>
           <Text style={styles.buttonText}>Create Account</Text>
@@ -121,6 +179,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
   },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+    marginTop: -10,
+  },
   belowText: {
     marginVertical: 10,
     flexDirection: "row",
@@ -142,7 +205,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     backgroundColor: "#405D72",
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 15,
   },
   buttonText: {
     color: "#fff",

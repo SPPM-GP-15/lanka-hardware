@@ -2,6 +2,8 @@ import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import OrderBox from "../../components/orders/OrderBox";
+import { ScrollView } from "react-native";
 
 export default function Orders() {
   const navigation = useNavigation();
@@ -19,26 +21,66 @@ export default function Orders() {
       });
     };
   }, [navigation]);
+  const orders = {
+    itemName: "Item 1",
+    orderDescription: "this ideads asddsdsda asd asdasd asd asd asdsads asdasd",
+    customerName: "Estimated",
+    orderPrice: 29.99,
+    orderStatus: "Cancelled",
+    category: "Hardware",
+  };
 
   const renderContent = () => {
     switch (selectedIndex) {
       case 0:
         return (
-          <View style={styles.box}>
-            <Text>Processing Orders</Text>
-          </View>
+          <ScrollView
+            vertical
+            showsVerticalScrollIndicator={true}
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            style={styles.box}
+          >
+            <View style={{ paddingHorizontal: 15 }}>
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+            </View>
+          </ScrollView>
         );
       case 1:
         return (
-          <View style={styles.box}>
-            <Text>Delivered Orders</Text>
-          </View>
+          <ScrollView
+            vertical
+            showsVerticalScrollIndicator={true}
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            style={styles.box}
+          >
+            <View style={{ paddingHorizontal: 15 }}>
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+            </View>
+          </ScrollView>
         );
       case 2:
         return (
-          <View style={styles.box}>
-            <Text>Completed Orders</Text>
-          </View>
+          <ScrollView
+            vertical
+            showsVerticalScrollIndicator={true}
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            style={styles.box}
+          >
+            <View style={{ paddingHorizontal: 15 }}>
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+              <OrderBox order={orders} />
+            </View>
+          </ScrollView>
         );
       default:
         return null;
@@ -48,13 +90,15 @@ export default function Orders() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Orders</Text>
-      <SegmentedControl
-        values={["Processing", "Delivered", "Completed"]}
-        selectedIndex={selectedIndex}
-        onChange={(event) => {
-          setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
-        }}
-      />
+      <View style={{ paddingHorizontal: 15 }}>
+        <SegmentedControl
+          values={["Processing", "Completed", "Cancelled"]}
+          selectedIndex={selectedIndex}
+          onChange={(event) => {
+            setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
+          }}
+        />
+      </View>
       {renderContent()}
     </View>
   );
@@ -62,18 +106,17 @@ export default function Orders() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
+    backgroundColor: "#fff",
   },
   header: {
+    padding: 10,
+    paddingHorizontal: 15,
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 15,
   },
   box: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
-    alignItems: "center",
+    marginVertical: 20,
+    height: "100%",
   },
 });

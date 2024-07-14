@@ -9,9 +9,9 @@ export default function AllItemButton() {
     <View style={styles.view}>
       <Pressable
         style={styles.pressable}
-        onPress={() => navigation.navigate("ProductDeatil")}
+        onPress={() => navigation.navigate("Search")}
       >
-        <Text style={styles.txt}>View all items</Text>
+        <Text style={styles.txt}>View all products</Text>
       </Pressable>
     </View>
   );
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 5,
     paddingHorizontal: 20,
-    borderRadius: 4,
+    borderRadius: 10,
     elevation: 3,
     backgroundColor: "black",
   },

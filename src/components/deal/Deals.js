@@ -4,15 +4,16 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import React from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { items } from "../../data/data";
 import ProductDeal from "./ProductDeal";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Deals(props) {
   const limitedItems = items.slice(0, 4);
+  const navigation = useNavigation();
   return (
     <View>
       <Text style={styles.txt}>{props.title}</Text>
@@ -20,7 +21,9 @@ export default function Deals(props) {
         data={limitedItems}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("DetailProduct", { item })}
+            >
               <View
                 style={[
                   styles.container,

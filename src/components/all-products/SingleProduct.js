@@ -1,18 +1,29 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
 
 export default function SingleProduct({ item }) {
   const { image, title, price, description, discountedPrice } = item;
+  const [loading, setLoading] = useState(true);
+
   return (
     <View style={styles.itemCard}>
-      <Image source={{ uri: image }} style={styles.itemImage} />
+      <View style={styles.imageContainer}>
+        <Image
+          source={{ uri: image }}
+          style={styles.itemImage}
+          onLoad={() => setLoading(false)}
+        />
+        {loading && (
+          <ActivityIndicator style={styles.loadingIndicator} size="small" />
+        )}
+      </View>
       <Text style={styles.itemTitle}>{title}</Text>
       <Text style={styles.itemDescription} numberOfLines={3}>
         {description}
       </Text>
       <Text style={styles.itemPrice}>Rs. {price}</Text>
       {discountedPrice && (
-        <Text style={styles.originalPrice}>Rs. {discountedPrice} </Text>
+        <Text style={styles.originalPrice}>Rs. {discountedPrice}</Text>
       )}
     </View>
   );
@@ -25,11 +36,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 2,
   },
-  itemImage: {
+  imageContainer: {
     width: "100%",
     height: 150,
-    resizeMode: "cover",
     marginBottom: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
+  itemImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    position: "absolute",
+  },
+  loadingIndicator: {
+    position: "absolute",
   },
   itemTitle: {
     fontSize: 15,

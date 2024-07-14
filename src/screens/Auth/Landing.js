@@ -1,12 +1,6 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import React, { useContext } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -91,7 +85,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#F7E7DC",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 15,
     borderWidth: 0.17,
     paddingHorizontal: 30,
     marginVertical: 15,

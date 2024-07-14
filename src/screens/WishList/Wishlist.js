@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import { ScrollView } from "react-native";
-import ProductCard from "../components/wishlist-product/ProductCard";
+import ProductCard from "../../components/wishlist-product/ProductCard";
 
 export default function Wishlist() {
   return (
