@@ -1,16 +1,19 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Octicons";
+
 const ProductCard = () => {
   return (
     <View style={styles.productCard}>
       <View style={styles.bookmarkContainer}>
+
         <Icon name="bookmark-slash" size={20} color="#666" onPress={() => {}} />
       </View>
       <Image
         source={{
           uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvmVxyZKcn9YaQjGCRZ4ZYtt5OyMWRRn9sWg&s",
         }}
+
         style={styles.productImage}
       />
       <View style={styles.productInfo}>
@@ -38,8 +41,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 8,
     padding: 16,
+
     margin: 8,
     marginHorizontal: 20,
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -54,7 +59,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
+
     marginRight: 15,
+
   },
   productInfo: {
     flex: 1,
@@ -68,7 +75,9 @@ const styles = StyleSheet.create({
   colorBar: {
     flexDirection: "row",
     alignItems: "center",
+
     marginVertical: 8,
+
   },
   colorBox: {
     borderWidth: 1,
@@ -85,12 +94,16 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 15,
     fontWeight: "bold",
+
     marginTop: 10,
+
     marginBottom: 8,
     borderWidth: 1,
     borderColor: "#666",
     borderRadius: 4,
+
     padding: 3,
+
     alignSelf: "flex-start",
   },
   productDescription: {
@@ -102,6 +115,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 15,
     right: 15,
+    zIndex: 1,
+  },
+  bookmarkContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
     zIndex: 1,
   },
 });

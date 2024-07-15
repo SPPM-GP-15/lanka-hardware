@@ -5,6 +5,7 @@ import ProductCard from "../../components/wishlist-product/ProductCard";
 
 export default function Wishlist() {
   return (
+
     <ScrollView showsVerticalScrollIndicator={true} style={styles.container}>
       <ProductCard />
       <ProductCard />
@@ -14,13 +15,16 @@ export default function Wishlist() {
       <ProductCard />
       <ProductCard />
     </ScrollView>
+
   );
 }
 
 const styles = StyleSheet.create({
+
   screen: {},
   container: {
     marginBottom: 20,
     marginTop: 30,
+
   },
 });
