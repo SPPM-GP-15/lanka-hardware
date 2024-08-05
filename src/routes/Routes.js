@@ -310,6 +310,8 @@ const AppTab = () => {
         name="Wishlist"
         options={{
           tabBarLabel: "WishList",
+          headerStyle: { backgroundColor: "#f2f2f2" },
+          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
             <Icon name="heart" color={color} size={26} />
           ),
