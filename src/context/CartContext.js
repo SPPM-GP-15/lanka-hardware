@@ -1,71 +1,27 @@
+import axios from "axios";
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { AuthContext } from "./AuthContext";
 
 // Create a Context for the cart
 const CartContext = createContext();
 
 // Create a provider component
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: "1",
-      name: "Nail 2 inch",
-      imageUrl: "https://via.placeholder.com/200",
-      category: "Nails",
-      price: 14.99,
-    },
-    {
-      id: "2",
-      name: "Paint 1 liter ",
-      imageUrl: "https://via.placeholder.com/200",
-      category: "Paint",
-      price: 14.99,
-    },
-    {
-      id: "3",
-      name: "Nothing to put here just put some random value",
-      imageUrl: "https://via.placeholder.com/200",
-      category: "Nails",
-      price: 34.99,
-    },
-    {
-      id: "4",
-      name: "Nothing to put here just put some random value",
-      imageUrl: "https://via.placeholder.com/200",
-      category: "Nails",
-      price: 34.99,
-    },
-    {
-      id: "5",
-      name: "Nothing to put here just put some random value",
-      imageUrl: "https://via.placeholder.com/200",
-      category: "Nails",
-      price: 34.99,
-    },
-    {
-      id: "6",
-      name: "Nothing to put here just put some random value",
-      imageUrl: "https://via.placeholder.com/200",
-      category: "Nails",
-      price: 34.99,
-    },
-    {
-      id: "7",
-      name: "Nothing to put here just put some random value",
-      imageUrl: "https://via.placeholder.com/200",
-      category: "Nails",
-      price: 34.99,
-    },
-  ]);
-
+  const [cartItems, setCartItems] = useState([]);
+  const { user } = useContext(AuthContext);
   const [subtotal, setSubtotal] = useState(0);
-  const [shipping, setShipping] = useState(10.0);
+  const [shipping, setShipping] = useState(500.0);
+  const cartCount = cartItems.length;
 
   useEffect(() => {
     calculateSubtotal();
   }, [cartItems]);
 
   const calculateSubtotal = () => {
-    const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+    const total = cartItems.reduce(
+      (acc, item) => acc + item.product.newPrice * item.quantity,
+      0
+    );
     setSubtotal(total);
   };
 
@@ -73,9 +29,22 @@ export const CartProvider = ({ children }) => {
     setCartItems([...cartItems, item]);
   };
 
-  const removeItemFromCart = (itemId) => {
-    const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
-    setCartItems(updatedCartItems);
+  const removeItemFromCart = async (itemId) => {
+    try {
+      const response = await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/cart/remove`,
+        {
+          user: user._id,
+          productId: itemId,
+        }
+      );
+      setCartItems(cartItems.filter((item) => item.product._id !== itemId));
+    } catch (error) {
+      console.error(
+        "Error removing from cart",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   return (
@@ -86,6 +55,8 @@ export const CartProvider = ({ children }) => {
         shipping,
         addItemToCart,
         removeItemFromCart,
+        setCartItems,
+        cartCount,
       }}
     >
       {children}

@@ -6,16 +6,17 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function EditProfile() {
   const navigation = useNavigation();
+  const { user, setUser } = useContext(AuthContext);
   const [name, setName] = useState("");
-  const [originalName, setOriginalName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [originalPhoneNumber, setOriginalPhoneNumber] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -32,12 +33,8 @@ export default function EditProfile() {
   }, [navigation]);
 
   useEffect(() => {
-    const profileName = "John Doe";
-    const profilePhoneNumber = "1234567890";
-    setName(profileName);
-    setOriginalName(profileName);
-    setPhoneNumber(profilePhoneNumber);
-    setOriginalPhoneNumber(profilePhoneNumber);
+    setName(user.name);
+    setPhoneNumber(user.phoneNumber);
   }, []);
 
   const handleUpdate = () => {
@@ -57,6 +54,11 @@ export default function EditProfile() {
     }
 
     setIsSaving(true);
+    const userData = {
+      name,
+      phoneNumber,
+    };
+
     Alert.alert("Confirm Update", "Are you sure you want to update?", [
       {
         text: "Cancel",
@@ -67,60 +69,30 @@ export default function EditProfile() {
         text: "OK",
         onPress: () => {
           setIsSaving(false);
-          navigation.goBack();
+          updateDB(userData);
         },
       },
     ]);
   };
-
-  const handleBackPress = () => {
-    if (name !== originalName || phoneNumber !== originalPhoneNumber) {
-      Alert.alert(
-        "Unsaved Changes",
-        "You have unsaved changes. Are you sure you want to go back?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Go Back",
-            onPress: () => navigation.goBack(),
-            style: "destructive",
-          },
-        ],
-        { cancelable: false }
+  const updateDB = async (userData) => {
+    try {
+      const response = await axios.put(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/users/updateUser/${user._id}`,
+        userData
       );
-    } else {
-      navigation.goBack();
+      if (response.data.success) {
+        setUser(response.data.user);
+        navigation.goBack();
+      } else {
+        console.error("Edit failed:", response.data.message);
+      }
+    } catch (error) {
+      console.error(
+        "Error updating profile:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
-
-  useEffect(() => {
-    const handleBeforeRemove = (e) => {
-      if (!isSaving) {
-        e.preventDefault();
-        Alert.alert(
-          "Discard changes?",
-          "If you go back now, your changes will be lost.",
-          [
-            { text: "Cancel", style: "cancel", onPress: () => {} },
-            {
-              text: "Discard",
-              style: "destructive",
-              onPress: () => navigation.dispatch(e.data.action),
-            },
-          ]
-        );
-      }
-    };
-
-    navigation.addListener("beforeRemove", handleBeforeRemove);
-
-    return () => {
-      navigation.removeListener("beforeRemove", handleBeforeRemove);
-    };
-  }, [navigation, name, phoneNumber, isSaving]);
 
   return (
     <View style={styles.viewBox}>

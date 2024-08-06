@@ -2,12 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useContext } from "react";
 import SingleProduct from "../all-products/SingleProduct";
 import { SearchContext } from "../../context/SearchContext";
-import { items } from "../../data/data";
 import { useNavigation } from "@react-navigation/native";
 
-export default function FewProducts() {
+export default function FewProducts({ products }) {
   const { value } = useContext(SearchContext);
-  const limitedItems = items.slice(0, 4);
   const navigation = useNavigation();
 
   return (
@@ -15,7 +13,7 @@ export default function FewProducts() {
       <Text style={styles.txt}>All Products</Text>
       <View style={styles.container}>
         <View style={styles.grid}>
-          {limitedItems.map((item, index) => (
+          {products.map((item, index) => (
             <TouchableOpacity
               key={index}
               style={styles.itemCard}

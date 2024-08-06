@@ -2,14 +2,14 @@ import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 
 export default function ProductDeal({ item }) {
-  const { image, title, price, description, discountedPrice } = item;
+  const { imageUrl, name, newPrice, description } = item;
   const [loading, setLoading] = useState(true);
 
   return (
     <View style={styles.itemCard}>
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: image }}
+          source={{ uri: imageUrl }}
           style={styles.itemImage}
           onLoad={() => setLoading(false)}
         />
@@ -17,13 +17,13 @@ export default function ProductDeal({ item }) {
           <ActivityIndicator style={styles.loadingIndicator} size="small" />
         )}
       </View>
-      <Text style={styles.itemTitle}>{title}</Text>
+      <Text style={styles.itemTitle}>{name}</Text>
       <Text style={styles.itemDescription} numberOfLines={2}>
         {description}
       </Text>
-      <Text style={styles.itemPrice}>Rs. {price}</Text>
-      {discountedPrice && (
-        <Text style={styles.originalPrice}>Rs. {discountedPrice}</Text>
+      <Text style={styles.itemPrice}>Rs. {newPrice}.00</Text>
+      {item.discountedPrice && (
+        <Text style={styles.originalPrice}>Rs. {item.discountedPrice}</Text>
       )}
     </View>
   );

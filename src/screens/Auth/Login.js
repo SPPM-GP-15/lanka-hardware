@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { AuthContext } from "../../context/AuthContext";
@@ -17,7 +18,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const navigation = useNavigation();
-  const { login } = useContext(AuthContext);
+  const { login, loading } = useContext(AuthContext);
 
   const validateInputs = () => {
     let valid = true;
@@ -41,77 +42,103 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    login(email);
-
-    // if (validateInputs()) {
-    //   login(email);
-    // } else {
-    //   Alert.alert(
-    //     "Invalid Input",
-    //     "Please check your input fields for errors."
-    //   );
-    // }
+    const userData = {
+      email: email,
+      password: password,
+    };
+    if (validateInputs()) {
+      login(userData);
+    } else {
+      Alert.alert(
+        "Invalid Input",
+        "Please check your input fields for errors."
+      );
+    }
   };
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-      bounces={false}
-      style={styles.container}
-    >
-      <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.title}>Back!</Text>
-      <View style={{ marginTop: 35 }}>
-        <View style={styles.inputContainer}>
-          <Icon name="user" size={24} color="black" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
-        </View>
-        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-
-        <View style={styles.inputContainer}>
-          <Icon name="lock" size={24} color="black" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
-        {errors.password && (
-          <Text style={styles.errorText}>{errors.password}</Text>
-        )}
-
+    <>
+      <View
+        style={
+          loading
+            ? {
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "white",
+              }
+            : { display: "none" }
+        }
+      >
+        <ActivityIndicator size={"large"} color="black" />
         <Text
-          style={styles.forgetPass}
-          onPress={() => navigation.navigate("ForgotPassword")}
+          style={{
+            fontSize: 20,
+            marginTop: 10,
+          }}
         >
-          Forgot password?
+          Loading
         </Text>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Log in</Text>
-        </TouchableOpacity>
-
-        <View style={styles.belowText}>
-          <Text style={styles.agreement}>Don't have an account? </Text>
-          <Text
-            style={styles.signupTxt}
-            onPress={() => navigation.navigate("Signup")}
-          >
-            Sign up
-          </Text>
-        </View>
       </View>
-    </ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+        bounces={false}
+        style={[styles.container, loading && { display: "none" }]}
+      >
+        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>Back!</Text>
+        <View style={{ marginTop: 35 }}>
+          <View style={styles.inputContainer}>
+            <Icon name="user" size={24} color="black" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+          </View>
+          {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
+          <View style={styles.inputContainer}>
+            <Icon name="lock" size={24} color="black" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+          {errors.password && (
+            <Text style={styles.errorText}>{errors.password}</Text>
+          )}
+
+          <Text
+            style={styles.forgetPass}
+            onPress={() => navigation.navigate("ForgotPassword")}
+          >
+            Forgot password?
+          </Text>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Log in</Text>
+          </TouchableOpacity>
+
+          <View style={styles.belowText}>
+            <Text style={styles.agreement}>Don't have an account? </Text>
+            <Text
+              style={styles.signupTxt}
+              onPress={() => navigation.navigate("Signup")}
+            >
+              Sign up
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

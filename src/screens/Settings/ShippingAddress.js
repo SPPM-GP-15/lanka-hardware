@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddressCard from "../../components/address/AddressCard";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 export default function ShippingAddress() {
   const navigation = useNavigation();
+  const { user, setUser } = useContext(AuthContext);
 
   useEffect(() => {
     const parent = navigation.getParent();
@@ -26,48 +29,32 @@ export default function ShippingAddress() {
     };
   }, [navigation]);
 
-  const [addresses, setAddresses] = useState([
-    {
-      name: "Jane Doe",
-      address: "3 Newbridge Court, Chino Hills, CA 91709, United States",
-      default: true,
-    },
-    {
-      name: "John Doe",
-      address: "3 Newbridge Court, Chino Hills, CA 91709, United States",
-      default: false,
-    },
-    {
-      name: "John Doe",
-      address: "51 Riverside, Chino Hills, CA 91709, United States",
-      default: false,
-    },
-  ]);
-
-  const handleDefault = (index) => {
-    const newAddresses = addresses.map((address, i) =>
-      i === index
-        ? { ...address, default: true }
-        : { ...address, default: false }
-    );
-    setAddresses(newAddresses);
+  const address = {
+    name: user.name,
+    address: user.address,
   };
 
-  const handleDelete = (index) => {
-    let newAddresses = addresses.filter((_, i) => i !== index);
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/users/${user._id}/address`
+      );
 
-    // Check if the deleted address was the default one
-    const hadDefault = addresses[index].default;
-
-    // If it was, set the first address in the list as the new default
-    if (hadDefault && newAddresses.length > 0) {
-      newAddresses[0].default = true;
+      if (response.status === 200) {
+        navigation.goBack();
+        setUser({ ...user, address: null });
+      } else {
+        console.error("Failed to delete address:", response.data.message);
+      }
+    } catch (error) {
+      console.error(
+        "Error deleting address:",
+        error.response ? error.response.data : error.message
+      );
     }
-
-    setAddresses(newAddresses);
   };
 
-  const confirmDelete = (index) => {
+  const confirmDelete = () => {
     Alert.alert(
       "Confirm Delete",
       "Are you sure you want to delete this address?",
@@ -75,7 +62,7 @@ export default function ShippingAddress() {
         { text: "Cancel", style: "cancel" },
         {
           text: "Delete",
-          onPress: () => handleDelete(index),
+          onPress: () => handleDelete(),
           style: "destructive",
         },
       ],
@@ -86,16 +73,8 @@ export default function ShippingAddress() {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {addresses.length > 0 ? (
-          addresses.map((address, index) => (
-            <AddressCard
-              key={index}
-              index={index}
-              address={address}
-              handleDefault={handleDefault}
-              confirmDelete={confirmDelete}
-            />
-          ))
+        {user.address ? (
+          <AddressCard confirmDelete={confirmDelete} />
         ) : (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
@@ -104,14 +83,16 @@ export default function ShippingAddress() {
           </View>
         )}
       </ScrollView>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          navigation.navigate("AddAddress");
-        }}
-      >
-        <Text style={{ fontSize: 32, color: "white" }}>+</Text>
-      </TouchableOpacity>
+      {!user.address && (
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            navigation.navigate("AddAddress");
+          }}
+        >
+          <Text style={{ fontSize: 32, color: "white" }}>+</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

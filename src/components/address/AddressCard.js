@@ -1,18 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { AuthContext } from "../../context/AuthContext";
 
-export default function AddressCard({
-  index,
-  address,
-  handleDefault,
-  confirmDelete,
-}) {
+export default function AddressCard({ index, confirmDelete }) {
+  const { user } = useContext(AuthContext);
   return (
     <View style={styles.addressCard}>
       <View style={styles.actions}>
         <View style={styles.addressInfo}>
-          <Text style={styles.name}>{address.name}</Text>
-          <Text style={styles.address}>{address.address}</Text>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text
+            style={styles.address}
+          >{`${user.address.addressLine}\n${user.address.city},\n${user.address.zip},\n${user.address.country}`}</Text>
         </View>
         <View style={styles.actions}>
           <TouchableOpacity style={styles.editButton}>
@@ -25,19 +24,6 @@ export default function AddressCard({
             <Text style={[styles.buttonText, { color: "white" }]}>Delete</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View style={{ marginTop: 20 }}>
-        <TouchableOpacity
-          onPress={() => handleDefault(index)}
-          style={[
-            styles.defaultButton,
-            address.default ? styles.defaultButtonActive : null,
-          ]}
-        >
-          <Text style={{ fontSize: 12, color: "#fff" }}>
-            {address.default ? "Default" : "Set as Default"}
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -68,17 +54,6 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  defaultButton: {
-    padding: 5,
-    borderRadius: 5,
-    marginRight: 10,
-    backgroundColor: "#06061b",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  defaultButtonActive: {
-    backgroundColor: "#3a9b7d",
   },
   editButton: {
     padding: 5,

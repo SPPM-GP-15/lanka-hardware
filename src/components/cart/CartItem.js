@@ -2,17 +2,19 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Icon from "react-native-vector-icons/Octicons";
 
-const CartItem = ({ item, onDelete }) => {
+const CartItem = ({ item, removeItemFromCart }) => {
   return (
     <View style={styles.cartItem}>
-      <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      <Image source={{ uri: item.product.imageUrl }} style={styles.image} />
       <View style={styles.itemDetails}>
-        <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.itemCategory}>{item.category}</Text>
-        <Text style={styles.itemPrice}>Rs. {item.price}</Text>
+        <Text style={styles.itemName}>{item.product.name}</Text>
+        <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+        <Text style={styles.itemPrice}>
+          Rs. {item.product.newPrice}.00 per item
+        </Text>
       </View>
       <TouchableOpacity
-        onPress={() => onDelete(item.id)}
+        onPress={() => removeItemFromCart(item.product._id)}
         style={styles.deleteButton}
       >
         <Icon name="trash" color="#fff" size={15} />
@@ -50,15 +52,15 @@ const styles = StyleSheet.create({
     color: "#333",
     width: "95%",
   },
-  itemCategory: {
-    fontSize: 13,
-    color: "#888",
-    marginTop: 4,
+  itemQuantity: {
+    fontSize: 14,
+    color: "#555",
+    marginTop: 7,
   },
   itemPrice: {
     fontSize: 14,
-    color: "#888",
-    marginTop: 4,
+    color: "#222",
+    marginTop: 7,
   },
   deleteButton: {
     backgroundColor: "#ff4d4d",

@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyProfile() {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
   const navigation = useNavigation();
 
   return (
@@ -26,12 +26,12 @@ export default function MyProfile() {
         <View style={styles.header}>
           <Image
             source={{
-              uri: "https://avatars.githubusercontent.com/u/76977136?v=4",
+              uri: "https://i.pinimg.com/736x/c0/74/9b/c0749b7cc401421662ae901ec8f9f660.jpg",
             }}
             style={styles.profileImage}
           />
-          <Text style={styles.name}>Ahmed Anwer</Text>
-          <Text style={styles.email}>ahmedanwer@gmail.com</Text>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.email}>{user.email}</Text>
         </View>
         <View style={{ flex: 1 }} />
 
@@ -77,7 +77,6 @@ export default function MyProfile() {
                 <Icon name="map-pin" size={15} style={styles.optionIcon} />
                 <View style={{ marginLeft: 10 }}>
                   <Text style={styles.optionText}>Shipping Address</Text>
-                  <Text style={styles.optionDetail}>3 addresses</Text>
                 </View>
               </View>
             </View>

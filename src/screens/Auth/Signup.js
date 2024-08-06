@@ -10,10 +10,13 @@ import {
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
+import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -36,6 +39,11 @@ const Signup = () => {
       errors.email = "Email address is invalid";
     }
 
+    if (!phoneNumber) {
+      valid = false;
+      errors.phoneNumber = "Phone number is required";
+    }
+
     if (!password) {
       valid = false;
       errors.password = "Password is required";
@@ -53,10 +61,49 @@ const Signup = () => {
     return valid;
   };
 
+  const signUp = async (userData) => {
+    try {
+      const response = await axios.post(
+        "https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/users/signup",
+        userData
+      );
+      if (response.data.success) {
+        Toast.show({
+          type: "success",
+          text1: "Successfully created an Account",
+          visibilityTime: 4000,
+          autoHide: true,
+        });
+        navigation.navigate("Login");
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Failed",
+          text2: response.data.message,
+          visibilityTime: 4000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Failed",
+        text2: error.response ? error.response.data : error.message,
+        visibilityTime: 4000,
+        autoHide: true,
+      });
+    }
+  };
+
   const handleCreateAccount = () => {
     if (validateInputs()) {
-      // Handle account creation logic here
-      console.log("Creating account with:", { name, email, password });
+      const data = {
+        name,
+        email,
+        phoneNumber,
+        password,
+      };
+      signUp(data);
     } else {
       Alert.alert(
         "Invalid Input",
@@ -100,6 +147,20 @@ const Signup = () => {
           />
         </View>
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
+        <View style={styles.inputContainer}>
+          <Icon name="phone" size={24} color="#000" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Phone Number"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            keyboardType="phone-pad"
+          />
+        </View>
+        {errors.phoneNumber && (
+          <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+        )}
 
         <View style={styles.inputContainer}>
           <Icon name="lock" size={24} color="#000" style={styles.icon} />

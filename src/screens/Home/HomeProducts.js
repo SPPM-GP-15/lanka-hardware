@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -14,8 +14,49 @@ import AllItemButton from "../../components/buttons/AllItemButton";
 import FewProducts from "../../components/all-products/FewProducts";
 import Deals from "../../components/deal/Deals";
 import CatergoryListedItems from "../../components/catergory/CatergoryListedItems";
+import axios from "axios";
 
 const HomeProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [todaysProducts, setTodaysProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/products`
+        );
+
+        const todaysProductsList = response.data.filter((product) => {
+          const today = new Date();
+          const productDate = new Date(product.createdAt);
+          return today.getDate() === productDate.getDate();
+        });
+        setTodaysProducts(todaysProductsList);
+        const slicedProducts = response.data;
+        setProducts(slicedProducts.slice(0, 10));
+        setAllProducts(response.data);
+      } catch (error) {
+        console.error(
+          "Error getting products:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const handleSearchChange = (query) => {
+    if (!query) {
+      setProducts(allProducts);
+    } else {
+      let filtered = allProducts.filter((product) =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setProducts(filtered);
+    }
+  };
+
   const [type, setType] = useState("All");
 
   return (
@@ -26,19 +67,21 @@ const HomeProducts = () => {
         keyboardShouldPersistTaps="handled"
       >
         <Text style={styles.text}>Lanka Hardware</Text>
-        <SearchBar placeholder="Search any Products..." />
+        <SearchBar
+          placeholder="Search any Products..."
+          handleSearchChange={handleSearchChange}
+        />
         <Category type={type} setType={setType} />
         {type === "All" || null ? (
           <>
             <Offer />
-            <Deals title={"Todays Deal"} />
-            <Deals title={"Trending Products"} />
+            <Deals title={"Todays Deal"} products={todaysProducts} />
 
-            <FewProducts />
+            <FewProducts products={products} />
             <AllItemButton />
           </>
         ) : (
-          <CatergoryListedItems type={type} />
+          <CatergoryListedItems type={type} products={allProducts} />
         )}
       </ScrollView>
     </SafeAreaView>

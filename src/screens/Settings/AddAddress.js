@@ -6,9 +6,11 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 const addressesInputs = {
   addressLine: "",
@@ -19,6 +21,7 @@ const addressesInputs = {
 
 export default function AddAddress() {
   const navigation = useNavigation();
+  const { user, setUser } = useContext(AuthContext);
   const [address, setAddress] = useState(addressesInputs);
   const [errors, setErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
@@ -50,9 +53,31 @@ export default function AddAddress() {
     setErrors(errors);
     return valid;
   };
+  const saveInDB = async (addressData) => {
+    try {
+      const response = await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/users/${user._id}/address`,
+        addressData
+      );
+      setUser({ ...user, address: response.data.address });
+      navigation.goBack();
+    } catch (error) {
+      console.error(
+        "Error adding address:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
 
   const handleSave = () => {
     if (validateInputs()) {
+      const addressData = {
+        addressLine: address.addressLine,
+        city: address.city,
+        zip: address.pincode,
+        country: address.country,
+      };
+
       setIsSaving(true);
       Alert.alert(
         "Confirm Save",
@@ -67,39 +92,13 @@ export default function AddAddress() {
             text: "OK",
             onPress: () => {
               setIsSaving(false);
-              navigation.goBack();
+              saveInDB(addressData);
             },
           },
         ]
       );
     }
   };
-
-  useEffect(() => {
-    const handleBeforeRemove = (e) => {
-      if (!isSaving) {
-        e.preventDefault();
-        Alert.alert(
-          "Discard changes?",
-          "If you go back now, your changes will be lost.",
-          [
-            { text: "Cancel", style: "cancel", onPress: () => {} },
-            {
-              text: "Discard",
-              style: "destructive",
-              onPress: () => navigation.dispatch(e.data.action),
-            },
-          ]
-        );
-      }
-    };
-
-    navigation.addListener("beforeRemove", handleBeforeRemove);
-
-    return () => {
-      navigation.removeListener("beforeRemove", handleBeforeRemove);
-    };
-  }, [navigation, address, isSaving]);
 
   return (
     <View style={styles.container}>

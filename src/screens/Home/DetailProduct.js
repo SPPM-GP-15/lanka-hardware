@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   TouchableOpacity,
@@ -9,21 +9,64 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import ProductData from "../../data/productData";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import Toast from "react-native-toast-message";
 
-const DetailProduct = ({ navigation }) => {
+const DetailProduct = ({ route }) => {
   const productData = ProductData;
+  const { user } = useContext(AuthContext);
+  const { item } = route.params;
+
+  const addToWishlist = async () => {
+    try {
+      const response = await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/users/wishlist/add/${user._id}/${item._id}`
+      );
+      console.log("Added to wishlist");
+    } catch (error) {
+      console.error(
+        "Error adding to wishlist:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const addToCart = async () => {
+    try {
+      const response = await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/cart/add`,
+        {
+          user: user._id,
+          product: item._id,
+        }
+      );
+      Toast.show({
+        type: "info",
+        text1: "Product added to Cart",
+        visibilityTime: 4000,
+        autoHide: true,
+      });
+      
+    } catch (error) {
+      console.error(
+        "Error adding to cart",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
 
   const renderHeader = () => (
     <View style={styles.content}>
       <Image
         source={{
-          uri: "https://raw.githubusercontent.com/SPPM-GP-15/lanka-hardware/cd071ccedde20eb4e13d4398696cf5c5bae804be/assets/item7.png?token=A24IMMO53WWEFWX4YNIZ4L3GSRS3C",
+          uri: item.imageUrl,
         }}
         style={styles.image}
         resizeMode="contain"
       />
       <View style={styles.color}>
-        <Text style={styles.colorText}>Color: Black</Text>
+        {/* <Text style={styles.colorText}>Color: Black</Text>
         <View style={styles.colorOptionsContainer}>
           <View style={styles.colorOptions}>
             <Text style={styles.colorOption}>White</Text>
@@ -31,42 +74,27 @@ const DetailProduct = ({ navigation }) => {
             <Text style={styles.colorOption}>Red</Text>
             <Text style={styles.colorOption}>Blue</Text>
           </View>
-        </View>
-        <Text style={styles.productTitle}>Dulux Interior Paint</Text>
-        <Text style={styles.productSubTitle}>
-          Dulux interior Emulsion paints (All Colours)
-        </Text>
-        <Text style={styles.productPrice}>Rs:4,500</Text>
+        </View> */}
+        <Text style={styles.productTitle}>{item.name}</Text>
+        <Text style={styles.productSubTitle}>{item.category.name}</Text>
+        <Text style={styles.productPrice}>Rs: {item.newPrice}.00</Text>
         <Text style={styles.productDetail}>Product Detail</Text>
-        <Text style={styles.productDetails}>
-          Our premium quality interior paint is designed to provide a smooth and
-          lasting finish for your indoor spaces. Available in a wide range of
-          colors, this paint ensures excellent coverage, vibrant color, and
-          durability. It is formulated to resist stains and is easy to clean.
-        </Text>
+        <Text style={styles.productDetails}>{item.description}</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.shoppingCarButton}>
+          <TouchableOpacity
+            style={styles.shoppingCarButton}
+            onPress={addToCart}
+          >
             <Text style={styles.buttonText}>
               <Icon name="shopping-cart" size={20} color="white" /> Add to Cart
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buyNowButton}>
+          <TouchableOpacity
+            style={styles.addtoWishList}
+            onPress={addToWishlist}
+          >
             <Text style={styles.buttonText}>
-              <Icon name="dollar-sign" size={20} color="white" />
-              Buy Now
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.viewSimilarButton}>
-            <Text style={styles.buttonText}>
-              <Icon name="eye" size={24} color="white" /> View Similar
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.compareButton}>
-            <Text style={styles.buttonText}>
-              <Icon name="tag" size={24} color="white" />
-              Compare
+              <Icon name="bookmark" size={24} color="white" /> Save
             </Text>
           </TouchableOpacity>
         </View>
@@ -171,10 +199,11 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 18,
     marginBottom: 10,
+    fontWeight: "bold",
   },
   productDetail: {
-    fontSize: 18,
-    marginBottom: 10,
+    fontSize: 16,
+    marginVertical: 10,
   },
   productDetails: {
     fontSize: 16,
@@ -203,7 +232,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
   },
-  viewSimilarButton: {
+  addtoWishList: {
     backgroundColor: "#626269",
     padding: 15,
     borderRadius: 10,

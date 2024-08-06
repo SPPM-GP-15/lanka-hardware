@@ -6,18 +6,43 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { category } from "../../data/data";
+import axios from "axios";
 
 export default function Category(props) {
+  const [categories, setCategories] = useState([
+    {
+      _id: 0,
+      name: "All",
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchCatergories = async () => {
+      try {
+        const response = await axios.get(
+          `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/categories`
+        );
+        setCategories([...categories, ...response.data]);
+      } catch (error) {
+        console.error(
+          "Error getting catergories:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+    fetchCatergories();
+  }, []);
+
   const type = props.type;
   const setType = props.setType;
   return (
     <View>
       <Text style={styles.txt}>All Featured</Text>
       <FlatList
-        data={category}
+        data={categories}
         renderItem={({ item, index }) => {
           return (
             <TouchableOpacity
@@ -29,7 +54,7 @@ export default function Category(props) {
                   styles.container,
                   index === 0 ? { marginLeft: 18 } : { marginLeft: 9 },
                 ]}
-                key={item.id}
+                key={item._id}
               >
                 <View>
                   <Image
@@ -53,7 +78,7 @@ export default function Category(props) {
         }}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(category) => category.id.toString()} // Corrected keyExtractor to return the id
+        //keyExtractor={(category) => category.id.toString()}
       />
     </View>
   );

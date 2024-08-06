@@ -1,33 +1,55 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Octicons";
-const ProductCard = () => {
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+
+const ProductCard = ({ item, setWishlist, wishlist }) => {
+  const { user } = useContext(AuthContext);
+
+  const handleRemoveFromWishlist = async () => {
+    try {
+      const response = await axios.delete(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/users/wishlist/remove/${user._id}/${item._id}`
+      );
+      console.log("Removed from wishlist");
+      if (response.status === 200) {
+        setWishlist(wishlist.filter((product) => product._id !== item._id));
+      }
+    } catch (error) {
+      console.error(
+        "Error removing wishlist:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
   return (
     <View style={styles.productCard}>
       <View style={styles.bookmarkContainer}>
-        <Icon name="bookmark-slash" size={20} color="#666" onPress={() => {}} />
+        <Icon
+          name="bookmark-slash"
+          size={20}
+          color="#666"
+          onPress={handleRemoveFromWishlist}
+        />
       </View>
       <Image
         source={{
-          uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvmVxyZKcn9YaQjGCRZ4ZYtt5OyMWRRn9sWg&s",
+          uri: item.imageUrl,
         }}
         style={styles.productImage}
       />
       <View style={styles.productInfo}>
-        <Text style={styles.productName}>Dulux Paint</Text>
+        <Text style={styles.productName}>{item.name}</Text>
         <View style={styles.colorBar}>
           <View style={styles.colorBox}>
-            <Text style={styles.productColor}>Black</Text>
-          </View>
-          <View style={styles.colorBox}>
-            <Text style={styles.productColor}>White</Text>
+            <Text style={styles.productColor}>{item.manufacturer}</Text>
           </View>
         </View>
-        <Text style={styles.productDescription}>
-          Premium quality interior paint available.
-        </Text>
+        <Text style={styles.productDescription}>{item.description}</Text>
         <View>
-          <Text style={styles.productPrice}>Rs. 4500</Text>
+          <Text style={styles.productPrice}>Rs. {item.newPrice}.00</Text>
         </View>
       </View>
     </View>

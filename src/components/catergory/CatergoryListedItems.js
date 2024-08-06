@@ -1,11 +1,20 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SingleProduct from "../all-products/SingleProduct";
-import { items } from "../../data/data";
 import { useNavigation } from "@react-navigation/native";
 
-export default function CatergoryListedItems({ type }) {
+export default function CategoryListedItems({ type, products }) {
+  const [allProducts, setAllProducts] = useState([]);
+
+  useEffect(() => {
+    let filtered = products.filter((product) =>
+      product.category.name.toLowerCase().includes(type.toLowerCase())
+    );
+    setAllProducts(filtered);
+  }, [type, products]);
+
   const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.resultsContainer}>
@@ -13,7 +22,7 @@ export default function CatergoryListedItems({ type }) {
       </View>
 
       <View style={styles.grid}>
-        {items.map((item, index) => (
+        {allProducts.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.itemCard}
@@ -26,6 +35,7 @@ export default function CatergoryListedItems({ type }) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -36,7 +46,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   title: {
     fontSize: 18,
     marginLeft: 14,

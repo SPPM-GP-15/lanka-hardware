@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,10 +11,34 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import CartItem from "../../components/cart/CartItem";
 import { useCart } from "../../context/CartContext";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 const Cart = () => {
   const navigation = useNavigation();
-  const { cartItems, subtotal, shipping, removeItemFromCart } = useCart();
+  const { cartItems, subtotal, shipping, removeItemFromCart, setCartItems } =
+    useCart();
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await axios.post(
+          `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/cart`,
+          {
+            user: user._id,
+          }
+        );
+        setCartItems(response.data.cartItems);
+      } catch (error) {
+        console.error(
+          "Error getting products from cart",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+    fetchCart();
+  }, []);
 
   if (cartItems.length === 0) {
     return (
@@ -42,8 +66,12 @@ const Cart = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.cartContainer}>
-        {cartItems.map((item) => (
-          <CartItem key={item.id} item={item} onDelete={removeItemFromCart} />
+        {cartItems.map((item, index) => (
+          <CartItem
+            key={index}
+            item={item}
+            removeItemFromCart={removeItemFromCart}
+          />
         ))}
       </ScrollView>
       <View style={styles.footer}>

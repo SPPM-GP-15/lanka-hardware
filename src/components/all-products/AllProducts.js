@@ -5,16 +5,17 @@ import { items } from "../../data/data";
 import { useNavigation } from "@react-navigation/native";
 import RNPickerSelect from "react-native-picker-select";
 
-export default function AllProducts() {
+export default function AllProducts({products}) {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <View style={styles.resultsContainer}>
-        {items && (
+        {products && (
           <Text style={styles.title}>
-            {items.length < 2 ? items.length : items.length - 1 + "+"} Item
-            {items.length > 1 && "s"}
+            {products.length < 2 ? products.length : products.length - 1 + "+"}{" "}
+            Item
+            {products.length > 1 && "s"}
           </Text>
         )}
         <View style={styles.sortFilterContainer}>
@@ -37,7 +38,7 @@ export default function AllProducts() {
       </View>
 
       <View style={styles.grid}>
-        {items.map((item, index) => (
+        {products.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.itemCard}
