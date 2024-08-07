@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -10,27 +10,50 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { CheckBox } from "react-native-elements/dist/checkbox/CheckBox";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 export default function ProfileDetails() {
   const navigation = useNavigation();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [zip, setZip] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
+  const { user, setUser } = useContext(AuthContext);
+  const [zip, setZip] = useState((user.address && user.address.zip) || "");
+  const [addressLine, setAddressLine] = useState(
+    (user.address && user.address.addressLine) || ""
+  );
+  const [city, setCity] = useState((user.address && user.address.city) || "");
+  const [country, setCountry] = useState(
+    (user.address && user.address.country) || ""
+  );
+
   const [useDefaultAddress, setUseDefaultAddress] = useState(false);
 
   const handleConfirm = () => {
-    // if (
-    //   !name ||
-    //   !email ||
-    //   (!useDefaultAddress && (!zip || !address || !city || !country))
-    // ) {
-    //   Alert.alert("Error", "Please fill in all required fields.");
-    //   return;
-    // }
-    navigation.navigate("Payment");
+    if (!useDefaultAddress && (!zip || !addressLine || !city || !country)) {
+      Alert.alert("Error", "Please fill in all required fields.");
+      return;
+    }
+    saveInDB({
+      zip,
+      addressLine,
+      city,
+      country,
+    });
+  };
+
+  const saveInDB = async (addressData) => {
+    try {
+      const response = await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/users/${user._id}/address`,
+        addressData
+      );
+      setUser({ ...user, address: response.data.address });
+      navigation.navigate("Payment");
+    } catch (error) {
+      console.error(
+        "Error adding address:",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   const handleChange = (setter) => (value) => setter(value);
@@ -45,28 +68,14 @@ export default function ProfileDetails() {
       <Text style={styles.title}>Personal Details</Text>
       <View style={{ marginTop: 10 }}>
         <Text style={styles.label}>Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={name}
-          onChangeText={handleChange(setName)}
-          autoCorrect={false}
-          textContentType="name"
-          autoCapitalize="words"
-          returnKeyType="next"
-        />
+        <TextInput style={styles.input} placeholder="Name" value={user.name} />
       </View>
       <View>
         <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
-          value={email}
-          onChangeText={handleChange(setEmail)}
-          autoCorrect={false}
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          returnKeyType="next"
+          value={user.email}
         />
       </View>
       <Text style={styles.title}>Address Details</Text>
@@ -90,8 +99,8 @@ export default function ProfileDetails() {
         <TextInput
           style={styles.input}
           placeholder="Address"
-          value={address}
-          onChangeText={handleChange(setAddress)}
+          value={addressLine}
+          onChangeText={handleChange(setAddressLine)}
           autoCorrect={false}
           textContentType="streetAddressLine1"
           returnKeyType="next"

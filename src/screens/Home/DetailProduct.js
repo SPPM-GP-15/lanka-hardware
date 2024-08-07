@@ -12,10 +12,12 @@ import ProductData from "../../data/productData";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import { useCart } from "../../context/CartContext";
 
 const DetailProduct = ({ route }) => {
   const productData = ProductData;
   const { user } = useContext(AuthContext);
+  const { updateCartItems, cartItems } = useCart();
   const { item } = route.params;
 
   const addToWishlist = async () => {
@@ -41,13 +43,13 @@ const DetailProduct = ({ route }) => {
           product: item._id,
         }
       );
+      updateCartItems([...cartItems, { product: item, quantity: 1 }]);
       Toast.show({
         type: "info",
         text1: "Product added to Cart",
         visibilityTime: 4000,
         autoHide: true,
       });
-      
     } catch (error) {
       console.error(
         "Error adding to cart",

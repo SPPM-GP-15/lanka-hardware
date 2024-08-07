@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native";
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { Alert, ScrollView, TouchableOpacity } from "react-native";
 import {
   View,
   Text,
@@ -8,17 +9,85 @@ import {
   StyleSheet,
   Keyboard,
 } from "react-native";
+import { AuthContext } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
+import { useNavigation } from "@react-navigation/native";
 
 const Payment = () => {
-  const [amount, setAmount] = useState("500.00");
+  const { user } = useContext(AuthContext);
+  const { cartItems, setCartItems, total } = useCart();
+  const navigation = useNavigation();
+
   const [nameOnCard, setNameOnCard] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [securityCode, setSecurityCode] = useState("");
 
   const handlePayment = () => {
-    // Handle payment logic here
-    console.log("Payment initiated!");
+    if (!nameOnCard.trim()) {
+      alert("Please enter the name on the card.");
+      return;
+    }
+    if (!validateCardNumber(cardNumber)) {
+      return;
+    }
+    if (!validateExpiryDate(expiryDate)) {
+      return;
+    }
+    if (!validateSecurityCode(securityCode)) {
+      return;
+    }
+    Keyboard.dismiss();
+    makeOrder();
+  };
+
+  const makeOrder = async () => {
+    try {
+      const response = await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/orders/create`,
+        {
+          user: user._id,
+          items: cartItems,
+          totalAmount: total,
+        }
+      );
+      setCartItems([]);
+      removeItemFromCart();
+
+      Alert.alert(
+        "Order Successful",
+        "Your order has been placed successfully!",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              parentNavigation.navigate("Home");
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error(
+        "Error making order:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const removeItemFromCart = async () => {
+    try {
+      const response = await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/cart/clear`,
+        {
+          user: user._id,
+        }
+      );
+    } catch (error) {
+      console.error(
+        "Error removing cart item:",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   const validateCardNumber = (text) => {
@@ -63,7 +132,7 @@ const Payment = () => {
       style={styles.container}
     >
       <Text style={styles.title}>Payment amount</Text>
-      <Text style={styles.amount}>Rs. {amount}</Text>
+      <Text style={styles.amount}>Rs. {total}</Text>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Name on card</Text>

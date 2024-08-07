@@ -1,56 +1,63 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
-const OrderBox = ({ order }) => {
+const OrderBox = ({ order, item }) => {
   const getStatusStyle = (status) => {
     switch (status) {
+      case "Pending":
+        return { backgroundColor: "#d4edda", color: "#155724" };
+      case "New":
+        return { backgroundColor: "#d4edda", color: "#155724" };
       case "Completed":
-        return { backgroundColor: "#d4edda", color: "#155724" }; // Green background, dark green text
-      case "Processing":
-        return { backgroundColor: "#cce5ff", color: "#004085" }; // Blue background, dark blue text
+        return { backgroundColor: "#cce5ff", color: "#004085" };
       case "Cancelled":
-        return { backgroundColor: "#f8d7da", color: "#721c24" }; // Red background, dark red text
+        return { backgroundColor: "#f8d7da", color: "#721c24" };
       default:
-        return { backgroundColor: "#e2e3e5", color: "#383d41" }; // Default grey background and text
+        return { backgroundColor: "#e2e3e5", color: "#383d41" };
     }
   };
-
-  const statusStyle = getStatusStyle(order.orderStatus);
+  const statusStyle = getStatusStyle(order.status);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.orderInfo}>
-        <Image
-          source={{
-            uri: "https://avatars.githubusercontent.com/u/76977136?v=4",
-          }}
-          style={styles.image}
-        />
-        <View>
-          <Text style={styles.itemName}>{order.itemName}</Text>
-          <Text style={styles.orderDescription} numberOfLines={3}>
-            {order.orderDescription}
+    <>
+      <View style={styles.container}>
+        <View style={styles.orderInfo}>
+          <Image
+            source={{
+              uri: item.product.imageUrl,
+            }}
+            style={styles.image}
+          />
+          <View>
+            <Text style={styles.itemName} numberOfLines={2}>
+              {item.product.name}
+            </Text>
+            <Text style={styles.orderDescription} numberOfLines={3}>
+              {item.product.description}
+            </Text>
+            <Text style={styles.orderCount} numberOfLines={3}>
+              Quantity: {item.quantity}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.orderDetails}>
+          <Text style={styles.customerName}>Price</Text>
+          <Text style={styles.orderPrice}>
+            Rs {item.product.newPrice * item.quantity}.00
           </Text>
-          <Text style={styles.orderCount} numberOfLines={3}>
-            {order.category}
+        </View>
+        <View
+          style={[
+            styles.orderStatus,
+            { backgroundColor: statusStyle.backgroundColor },
+          ]}
+        >
+          <Text style={[styles.status, { color: statusStyle.color }]}>
+            {order.status == "Pending" || "New" ? "Pending" : order.status}
           </Text>
         </View>
       </View>
-      <View style={styles.orderDetails}>
-        <Text style={styles.customerName}>Total Price</Text>
-        <Text style={styles.orderPrice}>Rs {order.orderPrice}</Text>
-      </View>
-      <View
-        style={[
-          styles.orderStatus,
-          { backgroundColor: statusStyle.backgroundColor },
-        ]}
-      >
-        <Text style={[styles.status, { color: statusStyle.color }]}>
-          {order.orderStatus}
-        </Text>
-      </View>
-    </View>
+    </>
   );
 };
 
@@ -77,6 +84,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 15,
     fontWeight: "bold",
+    maxWidth: 100,
   },
   orderDescription: {
     fontSize: 14,
@@ -101,6 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 10,
     fontWeight: "bold",
+    maxWidth: 80,
   },
   orderStatus: {
     padding: 5,

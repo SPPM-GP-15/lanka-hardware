@@ -12,6 +12,7 @@ export const CartProvider = ({ children }) => {
   const [subtotal, setSubtotal] = useState(0);
   const [shipping, setShipping] = useState(500.0);
   const cartCount = cartItems.length;
+  const total = subtotal + shipping;
 
   useEffect(() => {
     calculateSubtotal();
@@ -25,8 +26,37 @@ export const CartProvider = ({ children }) => {
     setSubtotal(total);
   };
 
-  const addItemToCart = (item) => {
-    setCartItems([...cartItems, item]);
+  const addItemToCart = async (item) => {
+    const existingItem = cartItems.find(
+      (cartItem) => cartItem.product._id === item.product._id
+    );
+
+    if (existingItem) {
+      const updatedCartItems = cartItems.map((cartItem) =>
+        cartItem.product._id === item.product._id
+          ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+          : cartItem
+      );
+      setCartItems(updatedCartItems);
+    } else {
+      setCartItems([...cartItems, item]);
+    }
+
+    try {
+      await axios.post(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/cart/add`,
+        {
+          user: user._id,
+          product: item.product._id,
+          quantity: item.quantity,
+        }
+      );
+    } catch (error) {
+      console.error(
+        "Error adding to cart",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   const removeItemFromCart = async (itemId) => {
@@ -57,6 +87,7 @@ export const CartProvider = ({ children }) => {
         removeItemFromCart,
         setCartItems,
         cartCount,
+        total,
       }}
     >
       {children}

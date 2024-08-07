@@ -1,13 +1,17 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import OrderBox from "../../components/orders/OrderBox";
 import { ScrollView } from "react-native";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Orders() {
   const navigation = useNavigation();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [orders, setOrders] = useState([]);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const parent = navigation.getParent();
@@ -21,14 +25,23 @@ export default function Orders() {
       });
     };
   }, [navigation]);
-  const orders = {
-    itemName: "Item 1",
-    orderDescription: "this ideads asddsdsda asd asdasd asd asd asdsads asdasd",
-    customerName: "Estimated",
-    orderPrice: 29.99,
-    orderStatus: "Cancelled",
-    category: "Hardware",
-  };
+
+  useEffect(() => {
+    const fetchOrdersByUser = async () => {
+      try {
+        const response = await axios.get(
+          `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/orders/user/${user._id}`
+        );
+        setOrders(response.data);
+      } catch (error) {
+        console.error(
+          "Error getting orders by user",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+    fetchOrdersByUser();
+  }, []);
 
   const renderContent = () => {
     switch (selectedIndex) {
@@ -41,10 +54,44 @@ export default function Orders() {
             keyboardShouldPersistTaps="handled"
             style={styles.box}
           >
-            <View style={{ paddingHorizontal: 15 }}>
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
+            <View style={{ paddingHorizontal: 15, marginBottom: 150 }}>
+              {orders
+                .filter(
+                  (order) =>
+                    order.status === "Pending" || order.status === "New"
+                )
+                .flatMap((order) =>
+                  order.items.length > 0
+                    ? order.items.map((item, index) => (
+                        <OrderBox
+                          order={order}
+                          key={`${order._id}-${index}`}
+                          item={item}
+                        />
+                      ))
+                    : null
+                ).length === 0 ? (
+                <Text style={{ marginTop: 50, textAlign: "center" }}>
+                  No orders found
+                </Text>
+              ) : (
+                orders
+                  .filter(
+                    (order) =>
+                      order.status === "Pending" || order.status === "New"
+                  )
+                  .flatMap((order) =>
+                    order.items.length > 0
+                      ? order.items.map((item, index) => (
+                          <OrderBox
+                            order={order}
+                            key={`${order._id}-${index}`}
+                            item={item}
+                          />
+                        ))
+                      : null
+                  )
+              )}
             </View>
           </ScrollView>
         );
@@ -57,11 +104,38 @@ export default function Orders() {
             keyboardShouldPersistTaps="handled"
             style={styles.box}
           >
-            <View style={{ paddingHorizontal: 15 }}>
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
+            <View style={{ paddingHorizontal: 15, marginBottom: 150 }}>
+              {orders
+                .filter((order) => order.status === "Completed")
+                .flatMap((order) =>
+                  order.items.length > 0
+                    ? order.items.map((item, index) => (
+                        <OrderBox
+                          order={order}
+                          key={`${order._id}-${index}`}
+                          item={item}
+                        />
+                      ))
+                    : null
+                ).length === 0 ? (
+                <Text style={{ marginTop: 50, textAlign: "center" }}>
+                  No completed orders
+                </Text>
+              ) : (
+                orders
+                  .filter((order) => order.status === "Completed")
+                  .flatMap((order) =>
+                    order.items.length > 0
+                      ? order.items.map((item, index) => (
+                          <OrderBox
+                            order={order}
+                            key={`${order._id}-${index}`}
+                            item={item}
+                          />
+                        ))
+                      : null
+                  )
+              )}
             </View>
           </ScrollView>
         );
@@ -74,11 +148,38 @@ export default function Orders() {
             keyboardShouldPersistTaps="handled"
             style={styles.box}
           >
-            <View style={{ paddingHorizontal: 15 }}>
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
-              <OrderBox order={orders} />
+            <View style={{ paddingHorizontal: 15, marginBottom: 150 }}>
+              {orders
+                .filter((order) => order.status === "Cancelled")
+                .flatMap((order) =>
+                  order.items.length > 0
+                    ? order.items.map((item, index) => (
+                        <OrderBox
+                          order={order}
+                          key={`${order._id}-${index}`}
+                          item={item}
+                        />
+                      ))
+                    : null
+                ).length === 0 ? (
+                <Text style={{ marginTop: 50, textAlign: "center" }}>
+                  No cancelled orders
+                </Text>
+              ) : (
+                orders
+                  .filter((order) => order.status === "Cancelled")
+                  .flatMap((order) =>
+                    order.items.length > 0
+                      ? order.items.map((item, index) => (
+                          <OrderBox
+                            order={order}
+                            key={`${order._id}-${index}`}
+                            item={item}
+                          />
+                        ))
+                      : null
+                  )
+              )}
             </View>
           </ScrollView>
         );
@@ -92,7 +193,7 @@ export default function Orders() {
       <Text style={styles.header}>Orders</Text>
       <View style={{ paddingHorizontal: 15 }}>
         <SegmentedControl
-          values={["Processing", "Completed", "Cancelled"]}
+          values={["Pending", "Completed", "Cancelled"]}
           selectedIndex={selectedIndex}
           onChange={(event) => {
             setSelectedIndex(event.nativeEvent.selectedSegmentIndex);

@@ -6,15 +6,36 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Icon from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useCart } from "../../context/CartContext";
+import axios from "axios";
 
 export default function MyProfile() {
   const { logout, user } = useContext(AuthContext);
+  const { setCartItems } = useCart();
   const navigation = useNavigation();
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrdersByUser = async () => {
+      try {
+        const response = await axios.get(
+          `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/orders/user/${user._id}`
+        );
+        setOrders(response.data);
+      } catch (error) {
+        console.error(
+          "Error getting orders by user",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
+    fetchOrdersByUser();
+  }, []);
 
   return (
     <ScrollView
@@ -59,9 +80,19 @@ export default function MyProfile() {
                 <Icon name="shopping-bag" size={15} style={styles.optionIcon} />
                 <View style={{ marginLeft: 10 }}>
                   <Text style={styles.optionText}>My Orders</Text>
-                  <Text style={styles.optionDetail}>
-                    Already have 12 orders
-                  </Text>
+                  {orders.filter(
+                    (order) => order.status === "Pending" || "New"
+                  ) && (
+                    <Text style={styles.optionDetail}>
+                      Already have{" "}
+                      {
+                        orders.filter(
+                          (order) => order.status === "Pending" || "New"
+                        ).length
+                      }{" "}
+                      orders on pending
+                    </Text>
+                  )}
                 </View>
               </View>
             </View>
@@ -83,7 +114,13 @@ export default function MyProfile() {
             <Icon name="chevron-right" size={18} color={"#aaa"} />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logOutBox} onPress={() => logout()}>
+          <TouchableOpacity
+            style={styles.logOutBox}
+            onPress={() => {
+              setCartItems([]);
+              logout();
+            }}
+          >
             <View style={styles.section}>
               <View style={styles.optionContent}>
                 <Text

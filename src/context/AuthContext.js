@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import Toast from "react-native-toast-message";
 
 export const AuthContext = createContext();

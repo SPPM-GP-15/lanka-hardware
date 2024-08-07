@@ -16,8 +16,14 @@ import axios from "axios";
 
 const Cart = () => {
   const navigation = useNavigation();
-  const { cartItems, subtotal, shipping, removeItemFromCart, setCartItems } =
-    useCart();
+  const {
+    cartItems,
+    subtotal,
+    shipping,
+    removeItemFromCart,
+    setCartItems,
+    total,
+  } = useCart();
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -82,9 +88,7 @@ const Cart = () => {
           <Text style={styles.subTotalText}>
             Shipping: Rs. {shipping.toFixed(2)}
           </Text>
-          <Text style={styles.totalText}>
-            Total: Rs. {(subtotal + shipping).toFixed(2)}
-          </Text>
+          <Text style={styles.totalText}>Total: Rs. {total.toFixed(2)}</Text>
         </View>
         <TouchableOpacity
           style={styles.checkoutButton}
