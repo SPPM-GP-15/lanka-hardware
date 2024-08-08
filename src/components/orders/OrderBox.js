@@ -53,7 +53,7 @@ const OrderBox = ({ order, item }) => {
           ]}
         >
           <Text style={[styles.status, { color: statusStyle.color }]}>
-            {order.status == "Pending" || "New" ? "Pending" : order.status}
+            {order.status}
           </Text>
         </View>
       </View>
