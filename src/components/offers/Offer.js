@@ -6,8 +6,8 @@ export default function Offer() {
   const images = [
     "https://www.aksmega.com.my/wp-content/uploads/2019/02/slider-image-banner-01.jpg",
     "https://im.hunt.in/cg/Munger/City-Guide/Hardware.jpg",
-    "https://wqkt.com/wp-content/uploads/2022/03/hardware-banner.jpg",
     "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/all-hardware-tools-sale-template-design-8ab526cc76312deeebf6e5041c5c9ad6_screen.jpg?ts=1681208904",
+    "https://wqkt.com/wp-content/uploads/2022/03/hardware-banner.jpg",
   ];
   return (
     <View style={{ marginVertical: 10 }}>
