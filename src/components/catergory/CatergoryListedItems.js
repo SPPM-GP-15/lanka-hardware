@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function CategoryListedItems({ type, products }) {
   const [allProducts, setAllProducts] = useState([]);
-  
+
   useEffect(() => {
     let filtered = products.filter(
       (product) =>
