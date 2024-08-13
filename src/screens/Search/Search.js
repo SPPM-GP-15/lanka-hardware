@@ -16,26 +16,28 @@ export default function Search() {
   const [products, setProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
 
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/products`
+      );
+      setProducts(response.data);
+      setAllProducts(response.data);
+    } catch (error) {
+      console.error(
+        "Error getting products:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/products`
-        );
-        setProducts(response.data);
-        setAllProducts(response.data);
-      } catch (error) {
-        console.error(
-          "Error getting products:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    };
     fetchProducts();
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
+    fetchProducts();
     setTimeout(() => setRefreshing(false), 1500);
   };
 
