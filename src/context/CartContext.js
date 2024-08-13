@@ -27,30 +27,16 @@ export const CartProvider = ({ children }) => {
   };
 
   const addItemToCart = async (item) => {
-    const existingItem = cartItems.find(
-      (cartItem) => cartItem.product._id === item.product._id
-    );
-
-    if (existingItem) {
-      const updatedCartItems = cartItems.map((cartItem) =>
-        cartItem.product._id === item.product._id
-          ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-          : cartItem
-      );
-      setCartItems(updatedCartItems);
-    } else {
-      setCartItems([...cartItems, item]);
-    }
-
     try {
-      await axios.post(
+      const response = await axios.post(
         `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/cart/add`,
         {
           user: user._id,
-          product: item.product._id,
-          quantity: item.quantity,
+          product: item._id,
         }
       );
+      setCartItems(response.data.items);
+      console.log("Added");
     } catch (error) {
       console.error(
         "Error adding to cart",

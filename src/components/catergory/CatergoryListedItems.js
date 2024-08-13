@@ -5,10 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function CategoryListedItems({ type, products }) {
   const [allProducts, setAllProducts] = useState([]);
-
+  
   useEffect(() => {
-    let filtered = products.filter((product) =>
-      product.category.name.toLowerCase().includes(type.toLowerCase())
+    let filtered = products.filter(
+      (product) =>
+        product.category &&
+        product.category.name &&
+        product.category.name.toLowerCase().includes(type.toLowerCase())
     );
     setAllProducts(filtered);
   }, [type, products]);

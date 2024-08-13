@@ -43,16 +43,18 @@ const Payment = () => {
 
   const makeOrder = async () => {
     try {
-      const response = await axios.post(
-        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/orders/create`,
-        {
-          user: user._id,
-          items: cartItems,
-          totalAmount: total,
-        }
-      );
-      setCartItems([]);
-      removeItemFromCart();
+      if (cartItems) {
+        await axios.post(
+          `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/orders/create`,
+          {
+            user: user._id,
+            items: cartItems,
+            totalAmount: total,
+          }
+        );
+        setCartItems([]);
+        removeItemFromCart();
+      }
 
       Alert.alert(
         "Order Successful",
@@ -61,7 +63,7 @@ const Payment = () => {
           {
             text: "OK",
             onPress: () => {
-              parentNavigation.navigate("Home");
+              navigation.navigate("Home");
             },
           },
         ]

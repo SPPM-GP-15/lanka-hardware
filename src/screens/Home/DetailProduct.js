@@ -17,7 +17,7 @@ import { useCart } from "../../context/CartContext";
 const DetailProduct = ({ route }) => {
   const productData = ProductData;
   const { user } = useContext(AuthContext);
-  const { updateCartItems, cartItems } = useCart();
+  const { addItemToCart } = useCart();
   const { item } = route.params;
 
   const addToWishlist = async () => {
@@ -29,30 +29,6 @@ const DetailProduct = ({ route }) => {
     } catch (error) {
       console.error(
         "Error adding to wishlist:",
-        error.response ? error.response.data : error.message
-      );
-    }
-  };
-
-  const addToCart = async () => {
-    try {
-      const response = await axios.post(
-        `https://lanka-hardware-9f40e74e1c93.herokuapp.com/api/cart/add`,
-        {
-          user: user._id,
-          product: item._id,
-        }
-      );
-      updateCartItems([...cartItems, { product: item, quantity: 1 }]);
-      Toast.show({
-        type: "info",
-        text1: "Product added to Cart",
-        visibilityTime: 4000,
-        autoHide: true,
-      });
-    } catch (error) {
-      console.error(
-        "Error adding to cart",
         error.response ? error.response.data : error.message
       );
     }
@@ -85,7 +61,7 @@ const DetailProduct = ({ route }) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.shoppingCarButton}
-            onPress={addToCart}
+            onPress={() => addItemToCart(item)}
           >
             <Text style={styles.buttonText}>
               <Icon name="shopping-cart" size={20} color="white" /> Add to Cart
@@ -101,7 +77,7 @@ const DetailProduct = ({ route }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.similarProductsContainer}>
+      {/* <View style={styles.similarProductsContainer}>
         <Text style={styles.similarProducts}>Similar Products</Text>
         <View style={styles.similarProductsSubContainer}>
           <Text style={styles.itemCount}>282+ Items</Text>
@@ -120,7 +96,7 @@ const DetailProduct = ({ route }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 
