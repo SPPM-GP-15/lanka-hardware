@@ -5,7 +5,7 @@ import { items } from "../../data/data";
 import { useNavigation } from "@react-navigation/native";
 import RNPickerSelect from "react-native-picker-select";
 
-export default function AllProducts({products}) {
+export default function AllProducts({ products }) {
   const navigation = useNavigation();
 
   return (
@@ -13,8 +13,7 @@ export default function AllProducts({products}) {
       <View style={styles.resultsContainer}>
         {products && (
           <Text style={styles.title}>
-            {products.length < 2 ? products.length : products.length - 1 + "+"}{" "}
-            Item
+            {products.length < 2 ? products.length : products.length} Item
             {products.length > 1 && "s"}
           </Text>
         )}
