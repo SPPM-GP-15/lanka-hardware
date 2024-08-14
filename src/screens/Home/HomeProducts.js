@@ -28,11 +28,16 @@ const HomeProducts = () => {
         );
 
         const todaysProductsList = response.data.filter((product) => {
-          const today = new Date();
+          const now = new Date();
           const productDate = new Date(product.createdAt);
-          return today.getDate() === productDate.getDate();
+
+          const timeDifference = now - productDate;
+
+          return timeDifference <= 24 * 60 * 60 * 1000;
         });
+
         setTodaysProducts(todaysProductsList);
+
         const slicedProducts = response.data;
         setProducts(slicedProducts.slice(0, 10));
         setAllProducts(response.data);
